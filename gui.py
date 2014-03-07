@@ -44,4 +44,5 @@ class mainWindow(QtGui.QMainWindow):
 
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
-        getFile(filename)
+        if filename != "":
+            getFile(filename)
