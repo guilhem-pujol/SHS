@@ -2,3 +2,6 @@ SHS/*
 
 #gedit backup files
 *~
+
+#python compiled files
+*.pyc
