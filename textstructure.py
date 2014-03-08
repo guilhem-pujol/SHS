@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -
 
+from debug import toASCII
+
 class StructureError(Exception):
     def __init__(self, value):
         self.value = value
@@ -20,8 +22,9 @@ class Text():
     def __str__(self):
         return "\n".join([str(v) for v in self.verses])
         
-    def text(self):
-        return " ".join([v.text()] for v in self.verses)
+    def text(self, linear = False):
+        if linear: return " ".join([v.text() for v in self.verses])
+        else: return "\n".join([v.text(True) for v in self.verses])
 
 class Verse():
     def __init__(self, feet):
@@ -35,8 +38,9 @@ class Verse():
     def __str__(self):
         return " | ".join([str(f) for f in self.feet])
         
-    def text(self):
-        return " ".join([f.text()] for f in self.feet)
+    def text(self, linear = False):
+        if linear: return " ".join([f.text() for f in self.feet])
+        else: return " | ".join([f.text(true) for f in self.feet])
         
 class Foot():
     dactyl = 0
@@ -64,8 +68,9 @@ class Foot():
     def __str__(self):
         return " - ".join([str(s) for s in self.syllables])
         
-    def text(self):
-        return " ".join([s.text()] for s in self.syllables)
+    def text(self, linear = False):
+        if linear: return " ".join([s.text for s in self.syllables])
+        else: return " - ".join([s.text for s in self.syllables])
     
 class Syllable():
     long_syl = 0
@@ -79,7 +84,7 @@ class Syllable():
         self.syl_type = syl_type
 
     def __str__(self):
-        return self.text
+        return toASCII(self.text)
         
     def text(self):
-        return str(self)
+        return self.text
