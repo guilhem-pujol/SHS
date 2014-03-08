@@ -9,7 +9,7 @@ class InputError(Exception):
     def __init__(self, value):
         self.value = value
     def __str__(self):
-        repr(self.value)
+        return repr(self.value)
 
 def sanitize(content):
     content = ''.join(c for c in unicodedata.normalize('NFD', content) if unicodedata.category(c) != 'Mn')
