@@ -20,10 +20,8 @@ class mainWindow(QtGui.QMainWindow):
         txtSearch.move(10, 30)
         editSearch = QtGui.QLineEdit(self)
         editSearch.move(80, 30)
-        txtResult = QtGui.QLabel(u'Résultat', self)
-        txtResult.move(10, 50)
-        displayResult = QtGui.QLineEdit(self)
-        displayResult.move(10, 70)
+        self.txtResult = QtGui.QLabel(u'Résultat', self)
+        self.txtResult.move(10, 70)
     
     def buildMenu(self):
         menubar = self.menuBar()
@@ -44,5 +42,9 @@ class mainWindow(QtGui.QMainWindow):
 
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
-        if filename != "":
-            getFile(filename)
+        if filename == "": return None
+        
+        text = getFile(filename)
+        self.setWindowTitle(u'LICORNE : '+filename)
+        self.txtResult.setFixedSize(500, 500)
+        self.txtResult.setText(u"Fichier chargé :\n"+text.text())
