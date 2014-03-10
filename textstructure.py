@@ -53,7 +53,7 @@ class Verse():
         
     def text(self, linear = False):
         if linear: return " ".join([f.text() for f in self.feet])
-        else: return " | ".join([f.text(true) for f in self.feet])
+        else: return " | ".join([f.text(True) for f in self.feet])
         
     def search(self, pattern):
         self.numMatch = sum([f.search(pattern) for f in self.feet])
