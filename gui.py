@@ -15,7 +15,7 @@ class mainWindow(QtGui.QMainWindow):
         self.buildLayout()
         
         self.setGeometry(200, 200, 1200, 800)
-        self.setWindowTitle(u'Lecteur Interdisciplinaire de Chants Oniriques Répondant aux Nouvelles Exigences')
+        self.setWindowTitle(u'Analyse fréquentielle de textes')
         
         self.text = None
     
@@ -68,7 +68,7 @@ class mainWindow(QtGui.QMainWindow):
         if filename == "": return None
         
         self.text = getFile(filename)
-        self.setWindowTitle(u'LICORNE : '+filename)
+        self.setWindowTitle(filename)
         self.txtDisplay.setText(u"Fichier chargé :\n"+self.text.text())
     
     def startSearch(self):
