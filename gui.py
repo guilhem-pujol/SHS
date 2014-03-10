@@ -15,18 +15,24 @@ class mainWindow(QtGui.QMainWindow):
         
         self.setGeometry(200, 200, 800, 600)
         self.setWindowTitle(u'Lecteur Interdisciplinaire de Chants Oniriques Répondant aux Nouvelles Exigences')
+        
+        self.text = None
     
     def buildLayout(self):
         txtSearch = QtGui.QLabel('Motif', self)
         txtSearch.move(10, 30)
         
         self.editSearch = QtGui.QLineEdit(self)
-        #FIXME: this is old API style, see how to use new method
+        #FIXME: this is the old API style, see how to use new method
         self.editSearch.textEdited.connect(self.startSearch)
         self.editSearch.move(80, 30)
         
-        self.txtResult = QtGui.QLabel(u'Résultat', self)
-        self.txtResult.move(10, 70)
+        self.txtDisplay = QtGui.QLabel(u'Texte', self)
+        self.txtDisplay.move(10, 70)
+        self.txtDisplay.setFixedSize(500, 500)
+        
+        self.searchResult = QtGui.QLabel(u'Résultat', self)
+        self.searchResult.move(200, 30)
     
     def buildMenu(self):
         menubar = self.menuBar()
@@ -49,10 +55,12 @@ class mainWindow(QtGui.QMainWindow):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
         if filename == "": return None
         
-        text = getFile(filename)
+        self.text = getFile(filename)
         self.setWindowTitle(u'LICORNE : '+filename)
-        self.txtResult.setFixedSize(500, 500)
-        self.txtResult.setText(u"Fichier chargé :\n"+text.text())
+        self.txtDisplay.setText(u"Fichier chargé :\n"+self.text.text())
         
     def startSearch(self):
+        if self.text == None: return
         self.editSearch.setText(toGreek(self.editSearch.text()))
+        self.text.search(unicode(self.editSearch.text()))
+        self.searchResult.setText(str(self.text.numMatch))
