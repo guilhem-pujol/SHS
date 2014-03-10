@@ -77,10 +77,10 @@ class mainWindow(QtGui.QMainWindow):
         self.text.search(unicode(self.editSearch.text()))
         self.searchResult.setText(str(self.text.numMatch))
         
-        graph1 = GraphDrawer(self.text)
+        graph1 = GraphDrawer(self.text, GraphDrawer.plotGlobal)
         graph1.buildGraph()
         self.graph1.setPixmap(graph1.getImage())
         
-        graph2 = GraphDrawer(self.text)
+        graph2 = GraphDrawer(self.text, GraphDrawer.plotPositions)
         graph2.buildGraph()
         self.graph2.setPixmap(graph2.getImage())

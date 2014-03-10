@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -
 
 from debug import toASCII
+from collections import defaultdict
 
 class StructureError(Exception):
     def __init__(self, value):
@@ -29,6 +30,11 @@ class Text():
         
     def search(self, pattern):
         self.numMatch = sum([v.search(pattern) for v in self.verses])
+
+        self.matchByPos = defaultdict(int)
+        for v in self.verses:
+            for pos, n in v.matchByPos.iteritems():
+                self.matchByPos[pos] += n
         
 
 class Verse():
@@ -40,6 +46,7 @@ class Verse():
             else:
                 raise StructureError("Verse(): argument must be a Foot list")
         self.numMatch = 0
+        self.matchByPos = None
 
     def __str__(self):
         return " | ".join([str(f) for f in self.feet])
@@ -50,6 +57,17 @@ class Verse():
         
     def search(self, pattern):
         self.numMatch = sum([f.search(pattern) for f in self.feet])
+        
+        self.matchByPos = defaultdict(int)
+        for i, f in enumerate(self.feet):
+            if f.metric == Foot.spondee:
+                self.matchByPos[str(i + 1)] = f.syllables[0].numMatch
+                self.matchByPos[str(i + 1)+"0"] = f.syllables[1].numMatch
+            elif f.metric == Foot.dactyl:
+                self.matchByPos[str(i + 1)] = f.syllables[0].numMatch
+                self.matchByPos[str(i + 1)+"1"] = f.syllables[1].numMatch
+                self.matchByPos[str(i + 1)+"2"] = f.syllables[2].numMatch
+        
         return self.numMatch
         
 class Foot():
@@ -85,7 +103,8 @@ class Foot():
         else: return " - ".join([s.text for s in self.syllables])
         
     def search(self, pattern):
-        self.numMatch = sum([s.search(pattern) for s in self.syllables])
+        self.matchByPos = [s.search(pattern) for s in self.syllables]
+        self.numMatch = sum(self.matchByPos)
         return self.numMatch
     
 class Syllable():

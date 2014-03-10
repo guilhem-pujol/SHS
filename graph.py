@@ -4,13 +4,15 @@
 from PyQt4 import QtGui
 
 class GraphDrawer:
-
-    def __init__(self, text):
+    plotGlobal = 0
+    plotPositions = 1
+    
+    def __init__(self, text, graphType):
         self.width = 500
         self.height = 200
         
         self.marginLeft = 5
-        self.marginRight = 5
+        self.marginRight = 15
         self.marginBottom = 5
         self.marginTop = 15
         
@@ -18,6 +20,7 @@ class GraphDrawer:
         self.yLegendWidth = 30
         
         self.text = text
+        self.graphType = graphType
         
         self.image = None
     
@@ -84,7 +87,12 @@ class GraphDrawer:
             self.painter.drawLine(x, self.pxY0, x, y)
 
     def generateData(self, text):
-        self.xValues = range(1, len(text.verses) + 1)
-        self.yValues = [v.numMatch for v in text.verses]
+        if self.graphType == GraphDrawer.plotGlobal:
+            self.xValues = range(1, len(text.verses) + 1)
+            self.yValues = [v.numMatch for v in text.verses]
+        else:
+            self.xValues = sorted(text.matchByPos.keys())
+            self.yValues = [text.matchByPos[x] for x in self.xValues]
+        
         self.yMax = max(self.yValues)
 
