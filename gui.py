@@ -14,7 +14,7 @@ class mainWindow(QtGui.QMainWindow):
         self.buildMenu()
         self.buildLayout()
         
-        self.setGeometry(200, 200, 800, 600)
+        self.setGeometry(200, 200, 1200, 800)
         self.setWindowTitle(u'Lecteur Interdisciplinaire de Chants Oniriques Répondant aux Nouvelles Exigences')
         
         self.text = None
@@ -29,15 +29,19 @@ class mainWindow(QtGui.QMainWindow):
         self.editSearch.move(80, 30)
         
         self.txtDisplay = QtGui.QLabel(u'Texte', self)
-        self.txtDisplay.move(10, 70)
-        self.txtDisplay.setFixedSize(500, 500)
+        self.txtDisplay.move(10, 300)
+        self.txtDisplay.setFixedSize(500, 1000)
         
         self.searchResult = QtGui.QLabel(u'Résultat', self)
         self.searchResult.move(200, 30)
         
-        self.graph = QtGui.QLabel(u'Graphe', self)
-        self.graph.move(200, 60)
-        self.graph.setFixedSize(500, 200) 
+        self.graph1 = QtGui.QLabel(u'Graphe', self)
+        self.graph1.move(10, 70)
+        self.graph1.setFixedSize(500, 200) 
+        
+        self.graph2 = QtGui.QLabel(u'Graphe 2', self)
+        self.graph2.move(550, 70)
+        self.graph2.setFixedSize(500, 200) 
     
     def buildMenu(self):
         menubar = self.menuBar()
@@ -72,6 +76,11 @@ class mainWindow(QtGui.QMainWindow):
         self.editSearch.setText(toGreek(self.editSearch.text()))
         self.text.search(unicode(self.editSearch.text()))
         self.searchResult.setText(str(self.text.numMatch))
-        graph = GraphDrawer(self.text)
-        graph.buildGraph()
-        self.graph.setPixmap(graph.getImage())
+        
+        graph1 = GraphDrawer(self.text)
+        graph1.buildGraph()
+        self.graph1.setPixmap(graph1.getImage())
+        
+        graph2 = GraphDrawer(self.text)
+        graph2.buildGraph()
+        self.graph2.setPixmap(graph2.getImage())
