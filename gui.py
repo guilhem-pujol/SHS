@@ -5,6 +5,7 @@ from PyQt4 import QtGui, QtCore
 import os
 from reader import getFile
 from debug import toGreek
+from graph import GraphDrawer
 
 class mainWindow(QtGui.QMainWindow):
     def __init__(self):
@@ -33,6 +34,10 @@ class mainWindow(QtGui.QMainWindow):
         
         self.searchResult = QtGui.QLabel(u'Résultat', self)
         self.searchResult.move(200, 30)
+        
+        self.graph = QtGui.QLabel(u'Graphe', self)
+        self.graph.move(200, 60)
+        self.graph.setFixedSize(500, 200) 
     
     def buildMenu(self):
         menubar = self.menuBar()
@@ -53,14 +58,20 @@ class mainWindow(QtGui.QMainWindow):
 
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
+        self.loadFile(filename)
+    
+    def loadFile(self, filename):
         if filename == "": return None
         
         self.text = getFile(filename)
         self.setWindowTitle(u'LICORNE : '+filename)
         self.txtDisplay.setText(u"Fichier chargé :\n"+self.text.text())
-        
+    
     def startSearch(self):
         if self.text == None: return
         self.editSearch.setText(toGreek(self.editSearch.text()))
         self.text.search(unicode(self.editSearch.text()))
         self.searchResult.setText(str(self.text.numMatch))
+        graph = GraphDrawer(self.text)
+        graph.buildGraph()
+        self.graph.setPixmap(graph.getImage())
