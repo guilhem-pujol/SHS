@@ -23,7 +23,6 @@ class GraphDrawer:
     
     def buildGraph(self):
         self.generateData(self.text)
-        if self.yMax == 0: return
         
         self.image = QtGui.QImage(self.width, self.height, 
             QtGui.QImage.Format_RGB32)
@@ -38,6 +37,10 @@ class GraphDrawer:
         self.painter.setBackground(white)
         self.painter.eraseRect(0, 0, self.width, self.height)
         
+        if self.yMax == 0:
+            self.painter.end()
+            return False
+        
         self.pxX0 = self.marginLeft + self.yLegendWidth
         self.pxXmax = self.width - self.marginRight
         self.pxY0 = self.height - self.marginBottom - self.xLegendHeight
@@ -50,7 +53,7 @@ class GraphDrawer:
         self.drawValues()
         
         self.painter.end()
-
+    
     def getImage(self):
         if self.image == None: return None
         return QtGui.QPixmap.fromImage(self.image)
