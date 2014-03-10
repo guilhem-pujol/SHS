@@ -12,12 +12,15 @@ class GraphDrawer:
         self.height = 200
         
         self.marginLeft = 5
-        self.marginRight = 15
+        self.marginRight = 25
         self.marginBottom = 5
         self.marginTop = 15
         
         self.xLegendHeight = 15
         self.yLegendWidth = 30
+        
+        self.xMinOffset = 0 # redefined by generateData
+        self.yMinOffset = 10
         
         self.text = text
         self.graphType = graphType
@@ -69,16 +72,22 @@ class GraphDrawer:
         self.painter.drawLine(self.pxX0, self.pxY0, self.pxX0, self.pxYmax)
         
         # x graduations
+        oldX = -self.xMinOffset
         for i, xVal in enumerate(self.xValues):
             x = self.pxX0 + (i + 1) * (self.pxXmax - self.pxX0) / len(self.xValues)
-            self.painter.drawLine(x, self.pxY0 - 2, x, self.pxY0 + 2)
-            self.painter.drawText(x, self.pxY0 + self.xLegendHeight, str(xVal))
-        
+            if x >= oldX + self.xMinOffset:
+                self.painter.drawLine(x, self.pxY0 - 2, x, self.pxY0 + 2)
+                self.painter.drawText(x, self.pxY0 + self.xLegendHeight, str(xVal))
+                oldX = x
+            
         # y graduations
+        oldY = self.height + self.yMinOffset
         for i in range(self.yMax + 1):
             y = self.pxY0 + i * (self.pxYmax - self.pxY0) / self.yMax
-            self.painter.drawLine(self.pxX0 - 2, y, self.pxX0 + 2, y)
-            self.painter.drawText(self.pxX0 - self.yLegendWidth, y, str(i))
+            if y <= oldY - self.yMinOffset:
+                self.painter.drawLine(self.pxX0 - 2, y, self.pxX0 + 2, y)
+                self.painter.drawText(self.pxX0 - self.yLegendWidth, y + 5, str(i))
+                oldY = y
         
     def drawValues(self):
         for i, yVal in enumerate(self.yValues):
@@ -94,5 +103,6 @@ class GraphDrawer:
             self.xValues = sorted(text.matchByPos.keys())
             self.yValues = [text.matchByPos[x] for x in self.xValues]
         
+        self.xMinOffset = 10 * max([len(str(x)) for x in self.xValues])
         self.yMax = max(self.yValues)
 
