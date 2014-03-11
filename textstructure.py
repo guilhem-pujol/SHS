@@ -15,11 +15,17 @@ class Text():
         self.verses = []
         self.numMatch = 0
         
+        self.begin = 0
+        self.end = 0
+        
     def addVerse(self, verse):
         if verse.__class__ == Verse:
             self.verses.append(verse)
         else:
             raise StructureError("Text.addVerse: argument must be a Verse")
+            
+        self.begin = 0
+        self.end = len(self.verses) - 1
     
     def __str__(self):
         return "\n".join([str(v) for v in self.verses])
@@ -29,10 +35,12 @@ class Text():
         else: return "\n".join([v.text(True) for v in self.verses])
         
     def search(self, pattern):
-        self.numMatch = sum([v.search(pattern) for v in self.verses])
-
+        self.numMatch = 0
         self.matchByPos = defaultdict(int)
-        for v in self.verses:
+        
+        for i in range(self.begin, self.end + 1):
+            v = self.verses[i]
+            self.numMatch += v.search(pattern)
             for pos, n in v.matchByPos.iteritems():
                 self.matchByPos[pos] += n
         

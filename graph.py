@@ -97,8 +97,8 @@ class GraphDrawer:
 
     def generateData(self, text):
         if self.graphType == GraphDrawer.plotGlobal:
-            self.xValues = range(1, len(text.verses) + 1)
-            self.yValues = [v.numMatch for v in text.verses]
+            self.xValues = range(text.begin + 1, text.end + 2)
+            self.yValues = [text.verses[x - 1].numMatch for x in self.xValues]
         else:
             self.xValues = sorted(text.matchByPos.keys())
             self.yValues = [text.matchByPos[x] for x in self.xValues]
