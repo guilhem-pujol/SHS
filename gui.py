@@ -29,11 +29,15 @@ class mainWindow(QtGui.QMainWindow):
         self.editSearch.move(80, 30)
         
         self.txtDisplay = QtGui.QLabel(u'Texte', self)
-        self.txtDisplay.move(10, 300)
-        self.txtDisplay.setFixedSize(500, 1000)
+        self.txtScrollArea = QtGui.QScrollArea(self);
+        self.txtScrollArea.move(10, 300)
+        self.txtScrollArea.setFixedSize(1000, 500)
+        self.txtScrollArea.setWidget(self.txtDisplay)
+        self.txtScrollArea.ensureWidgetVisible(self.txtDisplay)
         
         self.searchResult = QtGui.QLabel(u'Résultat', self)
         self.searchResult.move(200, 30)
+        self.searchResult.setFixedSize(300, 30)
         
         self.graph1 = QtGui.QLabel(u'Graphe', self)
         self.graph1.move(10, 70)
@@ -69,13 +73,14 @@ class mainWindow(QtGui.QMainWindow):
         
         self.text = getFile(filename)
         self.setWindowTitle(filename)
-        self.txtDisplay.setText(u"Fichier chargé :\n"+self.text.text())
-    
+        self.txtDisplay.setText("\n".join([str(i + 1)+" "+v.text() for i, v in enumerate(self.text.verses)]))
+        self.txtDisplay.setFixedSize(900, 15*len(self.text.verses))
+        
     def startSearch(self):
         if self.text == None: return
         self.editSearch.setText(toGreek(self.editSearch.text()))
         self.text.search(unicode(self.editSearch.text()))
-        self.searchResult.setText(str(self.text.numMatch))
+        self.searchResult.setText(str(self.text.numMatch)+u" occurence(s) trouvée(s)")
         
         graph1 = GraphDrawer(self.text, GraphDrawer.plotGlobal)
         graph1.buildGraph()
