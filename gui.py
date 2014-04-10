@@ -8,6 +8,12 @@ from debug import toGreek
 from graph import GraphDrawer
 import ui_gui
 
+class TextItem(QtGui.QListWidgetItem):
+  def __init__(self, text, fullName):
+    super(TextItem, self).__init__(text.name)
+    self.fullName = fullName
+    self.text = text
+
 class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -15,8 +21,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.setupUi(self)
         self.setupSignals()
         
-        self.texts = []
-        self.textsDescription = {}
+        self.texts = {}
     
     def setupSignals(self):
         #FIXME: this is the old API style, see how to use new method
@@ -38,10 +43,8 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         if filename in self.texts: return None
         
         newText = getFile(filename)
-        newItem = QtGui.QListWidgetItem(newText.name)
-        newItem.fullName = filename
-        self.texts.append(filename)
-        self.textsDescription[filename] = (newText, newItem)
+        newItem = TextItem(newText, filename)
+        self.texts[filename] = newItem
         
         self.textsList.addItem(newItem)
         self.textsList.setCurrentItem(newItem)
@@ -52,8 +55,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         currentItem = self.textsList.currentItem()
         if currentItem == None:
           return None
-        currentText = self.textsDescription[currentItem.fullName][0]
-        return currentText
+        return currentItem.text
 
     def updateTextDisplay(self):
         currentText = self.currentText()
