@@ -2,6 +2,8 @@ SHS/*
 
 #gedit backup files
 *~
+#vim backup files
+*.swp
 
 #python compiled files
 *.pyc

@@ -11,12 +11,14 @@ class StructureError(Exception):
         return repr(self.value)
 
 class Text():
-    def __init__(self):
+    def __init__(self, name):
+        self.name = name
         self.verses = []
         self.numMatch = 0
         
         self.begin = 0
         self.end = 0
+        self.used = False
         
     def addVerse(self, verse):
         if verse.__class__ == Verse:

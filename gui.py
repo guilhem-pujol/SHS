@@ -6,77 +6,27 @@ import os
 from reader import getFile
 from debug import toGreek
 from graph import GraphDrawer
+import ui_gui
 
-class mainWindow(QtGui.QMainWindow):
+class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def __init__(self):
-        super(mainWindow, self).__init__()
+        QtGui.QMainWindow.__init__(self)
         
-        self.buildMenu()
-        self.buildLayout()
+        self.setupUi(self)
+        self.setupSignals()
         
-        self.setGeometry(200, 200, 1200, 800)
-        self.setWindowTitle(u'Analyse fréquentielle de textes')
-        
-        self.text = None
+        self.texts = []
+        self.textsDescription = {}
     
-    def buildLayout(self):
-        txtSearch = QtGui.QLabel('Motif', self)
-        txtSearch.move(10, 30)
-        
-        self.editSearch = QtGui.QLineEdit(self)
+    def setupSignals(self):
         #FIXME: this is the old API style, see how to use new method
+        self.textsList.currentItemChanged.connect(self.updateTextDisplay)
         self.editSearch.textEdited.connect(self.startSearch)
-        self.editSearch.move(80, 30)
-
-        self.searchResult = QtGui.QLabel(u'Résultat', self)
-        self.searchResult.move(200, 30)
-        self.searchResult.setFixedSize(300, 30)
-        
-        self.graph1 = QtGui.QLabel(u'Graphe', self)
-        self.graph1.move(10, 70)
-        self.graph1.setFixedSize(500, 200) 
-        
-        self.graph2 = QtGui.QLabel(u'Graphe 2', self)
-        self.graph2.move(550, 70)
-        self.graph2.setFixedSize(500, 200)  
-        
-        txtFrom = QtGui.QLabel(u'Vers no', self)
-        txtFrom.move(10, 275)
-        self.editBegin = QtGui.QLineEdit(self)
-        self.editBegin.move(40, 275)
-        #FIXME: this is the old API style, see how to use new method
-        self.editBegin.textEdited.connect(self.updateBounds)
-        txtTo = QtGui.QLabel(u'jusqu\'à', self)
-        txtTo.move(140, 275)
-        self.editEnd = QtGui.QLineEdit(self)
-        self.editEnd.move(190, 275)
-        #FIXME: this is the old API style, see how to use new method
-        self.editEnd.textEdited.connect(self.updateBounds)
-               
-        self.txtDisplay = QtGui.QLabel(u'Texte', self)
-        self.txtScrollArea = QtGui.QScrollArea(self);
-        self.txtScrollArea.move(10, 310)
-        self.txtScrollArea.setFixedSize(1000, 500)
-        self.txtScrollArea.setWidget(self.txtDisplay)
-        self.txtScrollArea.ensureWidgetVisible(self.txtDisplay)
-        
-    
-    def buildMenu(self):
-        menubar = self.menuBar()
-
-        fileMenu = menubar.addMenu('&Fichier')
-
-        exitAction = QtGui.QAction(QtGui.QIcon('exit.png'), '&Quitter', self)        
-        exitAction.setShortcut('Ctrl+W')
-        exitAction.setStatusTip('Quitter le programme')
-        exitAction.triggered.connect(QtGui.qApp.quit)
-        fileMenu.addAction(exitAction)
-
-        openAction = QtGui.QAction('&Ouvrir', self)
-        openAction.setShortcut('Ctrl+O')
-        openAction.setStatusTip('Ouvrir un fichier')
-        openAction.triggered.connect(self.openNewFile)
-        fileMenu.addAction(openAction)
+        self.editBegin.textEdited.connect(self.updateText)
+        self.editEnd.textEdited.connect(self.updateText)
+        self.used.toggled.connect(self.updateText)
+        self.exitAction.triggered.connect(QtGui.qApp.quit)
+        self.openAction.triggered.connect(self.openNewFile)
 
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
@@ -84,43 +34,82 @@ class mainWindow(QtGui.QMainWindow):
     
     def loadFile(self, filename):
         if filename == "": return None
+        #TODO: better handling of this case
+        if filename in self.texts: return None
         
-        self.text = getFile(filename)
+        newText = getFile(filename)
+        newItem = QtGui.QListWidgetItem(newText.name)
+        newItem.fullName = filename
+        self.texts.append(filename)
+        self.textsDescription[filename] = (newText, newItem)
         
-        self.editBegin.setText(str(self.text.begin + 1))
-        self.editEnd.setText(str(self.text.end + 1))
+        self.textsList.addItem(newItem)
+        self.textsList.setCurrentItem(newItem)
+
+        self.updateTextDisplay()
+
+    def currentText(self):
+        currentItem = self.textsList.currentItem()
+        if currentItem == None:
+          return None
+        currentText = self.textsDescription[currentItem.fullName][0]
+        return currentText
+
+    def updateTextDisplay(self):
+        currentText = self.currentText()
+        if currentText == None:
+          #FIXME: disable every input widget
+          return
+
+        self.editBegin.setText(str(currentText.begin + 1))
+        self.editEnd.setText(str(currentText.end + 1))
+        self.used.setChecked(currentText.used)
+        self.setWindowTitle(currentText.name)
+
+        #TODO: update the list of texts (bold used text, show verses, ...)
         
-        self.setWindowTitle(filename)
-        self.displayText()
+        #TODO: maybe move this to the class Text
+        #TODO: also, better display of verses numbers
+        verses = currentText.verses[currentText.begin:currentText.end+1]
+        l = [str(currentText.begin+i+1) + " " + v.text() for (i, v) in enumerate(verses)]
+        self.textDisplay.setText("\n".join(l))
     
-    def displayText(self):
-        self.txtDisplay.setText("\n".join([str(i + 1)+" "+self.text.verses[i].text() for i in range(self.text.begin, self.text.end + 1)]))
-        self.txtDisplay.setFixedSize(900, 15*(self.text.end - self.text.begin + 2))
-    
-    def updateBounds(self):
+    def updateText(self):
+        currentText = self.currentText()
+        if currentText == None:
+          #FIXME: if the input widgets are disabled, this shouldn't happen
+          return
+
         begin = int(self.editBegin.text()) - 1
         end = int(self.editEnd.text()) - 1
+        used = self.used.isChecked()
+
+        #FIXME: add a validator to the QLineEdit
         if begin > end: return
         if begin < 0: return
-        if end >= len(self.text.verses): return
+        if end >= len(currentText.verses): return
         
-        self.text.begin = begin
-        self.text.end = end
+        currentText.begin = begin
+        currentText.end = end
+        currentText.used = used
         
-        self.displayText()
+        self.updateTextDisplay()
+        #if used: FIXME: add this line when the multi-text search works
         self.startSearch()
     
     def startSearch(self):
-        if self.text == None: return
+        #TODO: multi-text search
+        currentText = self.currentText()
+        if currentText == None: return
         self.editSearch.setText(toGreek(self.editSearch.text()))
-        self.text.search(unicode(self.editSearch.text()))
-        self.searchResult.setText(str(self.text.numMatch)+u" occurence(s) trouvée(s)")
+        currentText.search(unicode(self.editSearch.text()))
+        self.searchResult.setText(str(currentText.numMatch)+u" occurence(s) trouvée(s)")
         
-        graph1 = GraphDrawer(self.text, GraphDrawer.plotGlobal)
+        graph1 = GraphDrawer(currentText, GraphDrawer.plotGlobal)
         graph1.buildGraph()
         self.graph1.setPixmap(graph1.getImage())
         
-        graph2 = GraphDrawer(self.text, GraphDrawer.plotPositions)
+        graph2 = GraphDrawer(currentText, GraphDrawer.plotPositions)
         graph2.buildGraph()
         self.graph2.setPixmap(graph2.getImage())
         

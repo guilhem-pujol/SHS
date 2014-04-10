@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import unicodedata
+import ntpath
 from debug import toASCII
 from textstructure import *
+
 
 class InputError(Exception):
     def __init__(self, value):
@@ -23,7 +25,7 @@ def getFile(filename):
     content = f.read().decode('utf-8')
     content = sanitize(content)
     
-    result = Text()
+    result = Text(ntpath.basename(str(filename)))
     for line in content.split("\n"):
         verse = buildVerseFromLine(line)
         if verse != None:
