@@ -9,10 +9,10 @@ from graph import GraphDrawer
 import ui_gui
 
 class TextItem(QtGui.QListWidgetItem):
-  def __init__(self, text, fullName):
-    super(TextItem, self).__init__(text.name)
-    self.fullName = fullName
-    self.text = text
+    def __init__(self, text, fullName):
+        super(TextItem, self).__init__(text.name)
+        self.fullName = fullName
+        self.text = text
 
 class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def __init__(self):
@@ -33,6 +33,8 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.used.toggled.connect(self.updateText)
         self.exitAction.triggered.connect(QtGui.qApp.quit)
         self.openAction.triggered.connect(self.openNewFile)
+        self.selectAll.clicked.connect(self.doSelectAll)
+        self.deselectAll.clicked.connect(self.doDeselectAll)
 
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Ouvrir un fichier',
@@ -62,8 +64,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def updateTextDisplay(self):
         currentItem = self.textsList.currentItem()
         if currentItem == None:
-          #FIXME: disable every input widget
+          self.centralWidget.setEnabled(False)
           return
+        self.centralWidget.setEnabled(True)
         currentText = currentItem.text
 
         self.editBegin.setText(str(currentText.begin + 1))
@@ -71,7 +74,6 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.used.setChecked(currentText.used)
         self.setWindowTitle(currentText.name)
 
-        #TODO: update the list of texts (bold used text, show verses, ...)
         font = currentItem.font()
         font.setBold(currentText.used)
         currentItem.setFont(font)
@@ -92,17 +94,17 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def updateText(self):
         currentText = self.currentText()
         if currentText == None:
-          #FIXME: if the input widgets are disabled, this shouldn't happen
           return
-
-        begin = int(self.editBegin.text()) - 1
-        end = int(self.editEnd.text()) - 1
-        used = self.used.isChecked()
-
-        #FIXME: add a validator to the QLineEdit
-        if begin > end: return
-        if begin < 0: return
+        if self.editBegin.text() == '' or self.editEnd.text() == '':
+          return
+        begin, bok = self.editBegin.text().toInt()
+        end, eok = self.editEnd.text().toInt()
+        if not bok or not eok: return
+        begin -= 1
+        end -= 1
         if end >= len(currentText.verses): return
+        if begin > end: return
+        used = self.used.isChecked()
         
         currentText.begin = begin
         currentText.end = end
