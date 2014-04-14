@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Thu Apr 10 07:17:16 2014
+# Created: Mon Apr 14 13:22:00 2014
 #      by: PyQt4 UI code generator 4.9.1
 #
 # WARNING! All changes made in this file will be lost!
@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
         self.editEnd.setMaximumSize(QtCore.QSize(50, 30))
         self.editEnd.setObjectName(_fromUtf8("editEnd"))
         self.horizontalLayout_4.addWidget(self.editEnd)
-        spacerItem2 = QtGui.QSpacerItem(624, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
+        spacerItem2 = QtGui.QSpacerItem(619, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem2)
         self.horizontalLayout_4.setStretch(4, 1)
         self.verticalLayout_2.addWidget(self.bar3)
@@ -150,17 +150,24 @@ class Ui_MainWindow(object):
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
         MainWindow.setMenuBar(self.menuBar)
         self.dockWidget_2 = QtGui.QDockWidget(MainWindow)
+        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Minimum, QtGui.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dockWidget_2.sizePolicy().hasHeightForWidth())
+        self.dockWidget_2.setSizePolicy(sizePolicy)
         self.dockWidget_2.setMinimumSize(QtCore.QSize(200, 124))
-        self.dockWidget_2.setMaximumSize(QtCore.QSize(200, 524287))
+        self.dockWidget_2.setMaximumSize(QtCore.QSize(524287, 524287))
+        self.dockWidget_2.setFeatures(QtGui.QDockWidget.DockWidgetFloatable|QtGui.QDockWidget.DockWidgetMovable)
         self.dockWidget_2.setAllowedAreas(QtCore.Qt.LeftDockWidgetArea|QtCore.Qt.RightDockWidgetArea)
         self.dockWidget_2.setObjectName(_fromUtf8("dockWidget_2"))
         self.dockWidgetContents_2 = QtGui.QWidget()
         self.dockWidgetContents_2.setObjectName(_fromUtf8("dockWidgetContents_2"))
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.dockWidgetContents_2)
+        self.verticalLayout_3.setContentsMargins(3, -1, 3, -1)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
         self.textsList = QtGui.QListWidget(self.dockWidgetContents_2)
         self.textsList.setMinimumSize(QtCore.QSize(200, 0))
-        self.textsList.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.textsList.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.textsList.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.textsList.setSelectionMode(QtGui.QAbstractItemView.SingleSelection)
         self.textsList.setObjectName(_fromUtf8("textsList"))
@@ -193,6 +200,7 @@ class Ui_MainWindow(object):
 "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
 "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
         self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "&Fichier", None, QtGui.QApplication.UnicodeUTF8))
+        self.dockWidget_2.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Textes ouverts", None, QtGui.QApplication.UnicodeUTF8))
         self.openAction.setText(QtGui.QApplication.translate("MainWindow", "&Ouvrir", None, QtGui.QApplication.UnicodeUTF8))
         self.openAction.setStatusTip(QtGui.QApplication.translate("MainWindow", "Ouvrir un fichier", None, QtGui.QApplication.UnicodeUTF8))
         self.openAction.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+O", None, QtGui.QApplication.UnicodeUTF8))

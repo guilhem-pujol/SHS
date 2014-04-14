@@ -21,6 +21,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.setupUi(self)
         self.setupSignals()
         
+        #FIXME: not sure this attribute is useful
         self.texts = {}
     
     def setupSignals(self):
@@ -34,7 +35,8 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.openAction.triggered.connect(self.openNewFile)
 
     def openNewFile(self):
-        filename = QtGui.QFileDialog.getOpenFileName(self, 'Open File', os.getenv('HOME'))
+        filename = QtGui.QFileDialog.getOpenFileName(self, 'Ouvrir un fichier',
+            os.getenv('HOME'))
         self.loadFile(filename)
     
     def loadFile(self, filename):
@@ -48,7 +50,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
         self.textsList.addItem(newItem)
         self.textsList.setCurrentItem(newItem)
-
+        
         self.updateTextDisplay()
 
     def currentText(self):
@@ -58,10 +60,11 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         return currentItem.text
 
     def updateTextDisplay(self):
-        currentText = self.currentText()
-        if currentText == None:
+        currentItem = self.textsList.currentItem()
+        if currentItem == None:
           #FIXME: disable every input widget
           return
+        currentText = currentItem.text
 
         self.editBegin.setText(str(currentText.begin + 1))
         self.editEnd.setText(str(currentText.end + 1))
@@ -69,11 +72,21 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.setWindowTitle(currentText.name)
 
         #TODO: update the list of texts (bold used text, show verses, ...)
+        font = currentItem.font()
+        font.setBold(currentText.used)
+        currentItem.setFont(font)
+        if currentText.used:
+          name = u'{} ({} à {})'.format(currentText.name, currentText.begin+1,
+              currentText.end+1)
+        else:
+          name = currentText.name
+        currentItem.setText(name)
         
         #TODO: maybe move this to the class Text
         #TODO: also, better display of verses numbers
         verses = currentText.verses[currentText.begin:currentText.end+1]
-        l = [str(currentText.begin+i+1) + " " + v.text() for (i, v) in enumerate(verses)]
+        l = [str(currentText.begin+i+1) + " " + v.text()
+            for (i, v) in enumerate(verses)]
         self.textDisplay.setText("\n".join(l))
     
     def updateText(self):

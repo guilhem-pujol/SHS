@@ -309,7 +309,7 @@
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>624</width>
+           <width>619</width>
            <height>20</height>
           </size>
          </property>
@@ -375,6 +375,12 @@ p, li { white-space: pre-wrap; }
    <addaction name="menuFile"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <property name="minimumSize">
     <size>
      <width>200</width>
@@ -383,18 +389,30 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="maximumSize">
     <size>
-     <width>200</width>
+     <width>524287</width>
      <height>524287</height>
     </size>
    </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea|Qt::RightDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Textes ouverts</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <property name="leftMargin">
+      <number>3</number>
+     </property>
+     <property name="rightMargin">
+      <number>3</number>
+     </property>
      <item>
       <widget class="QListWidget" name="textsList">
        <property name="minimumSize">
@@ -405,7 +423,7 @@ p, li { white-space: pre-wrap; }
        </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
