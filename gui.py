@@ -26,7 +26,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     
     def setupSignals(self):
         #FIXME: this is the old API style, see how to use new method
-        self.textsList.currentItemChanged.connect(self.updateTextDisplay)
+        self.textsList.currentItemChanged.connect(self.updateDisplay)
         self.editSearch.textEdited.connect(self.startSearch)
         self.editBegin.textEdited.connect(self.updateText)
         self.editEnd.textEdited.connect(self.updateText)
@@ -53,15 +53,36 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.textsList.addItem(newItem)
         self.textsList.setCurrentItem(newItem)
         
-        self.updateTextDisplay()
+        self.updateDisplay()
 
-    def currentText(self):
-        currentItem = self.textsList.currentItem()
-        if currentItem == None:
-          return None
-        return currentItem.text
+    def doSelectAll(self):
+        for i in range(len(self.textsList)):
+            item = self.textsList.item(i)
+            item.text.used = True
+        self.updateDisplay()
 
-    def updateTextDisplay(self):
+    def doDeselectAll(self):
+        for i in range(len(self.textsList)):
+            item = self.textsList.item(i)
+            item.text.used = False
+        self.updateDisplay()
+    
+    def updateDisplay(self):
+        self.updateCurrentTextDisplay()
+        for i in range(len(self.textsList)):
+            item = self.textsList.item(i)
+
+            font = item.font()
+            font.setBold(item.text.used)
+            item.setFont(font)
+            if item.text.used:
+                name = u'{} ({} à {})'.format(item.text.name, item.text.begin+1,
+                    item.text.end+1)
+            else:
+                name = u'{}'.format(item.text.name)
+            item.setText(name)
+
+    def updateCurrentTextDisplay(self):
         currentItem = self.textsList.currentItem()
         if currentItem == None:
           self.centralWidget.setEnabled(False)
@@ -73,16 +94,6 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.editEnd.setText(str(currentText.end + 1))
         self.used.setChecked(currentText.used)
         self.setWindowTitle(currentText.name)
-
-        font = currentItem.font()
-        font.setBold(currentText.used)
-        currentItem.setFont(font)
-        if currentText.used:
-          name = u'{} ({} à {})'.format(currentText.name, currentText.begin+1,
-              currentText.end+1)
-        else:
-          name = currentText.name
-        currentItem.setText(name)
         
         #TODO: maybe move this to the class Text
         #TODO: also, better display of verses numbers
@@ -92,9 +103,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.textDisplay.setText("\n".join(l))
     
     def updateText(self):
-        currentText = self.currentText()
-        if currentText == None:
-          return
+        currentText = self.textsList.currentItem().text
         if self.editBegin.text() == '' or self.editEnd.text() == '':
           return
         begin, bok = self.editBegin.text().toInt()
@@ -110,14 +119,16 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         currentText.end = end
         currentText.used = used
         
-        self.updateTextDisplay()
+        self.updateDisplay()
         #if used: FIXME: add this line when the multi-text search works
         self.startSearch()
     
     def startSearch(self):
         #TODO: multi-text search
-        currentText = self.currentText()
-        if currentText == None: return
+        currentItem = self.textsList.currentItem()
+        if currentItem == None: return
+        currentText = currentItem.text
+
         self.editSearch.setText(toGreek(self.editSearch.text()))
         currentText.search(unicode(self.editSearch.text()))
         self.searchResult.setText(str(currentText.numMatch)+u" occurence(s) trouvée(s)")
