@@ -125,7 +125,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         currentItem = self.textsList.currentItem()
         if currentItem == None: return
         currentText = currentItem.text
-
+        
+        if len(self.editSearch.text()) == 0: return
+        
         self.editSearch.setText(toGreek(self.editSearch.text()))
         numMatch = currentText.search(unicode(self.editSearch.text()))
         self.searchResult.setText(str(numMatch)+u" occurence(s) trouvée(s)")
