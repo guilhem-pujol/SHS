@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1237</width>
+    <width>1240</width>
     <height>800</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1200</width>
+    <width>1240</width>
     <height>800</height>
    </size>
   </property>
@@ -147,7 +147,7 @@
       <property name="minimumSize">
        <size>
         <width>1020</width>
-        <height>220</height>
+        <height>250</height>
        </size>
       </property>
       <property name="maximumSize">
@@ -156,64 +156,93 @@
         <height>220</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <property name="spacing">
-        <number>4</number>
+        <number>3</number>
        </property>
-       <property name="leftMargin">
-        <number>5</number>
-       </property>
-       <property name="rightMargin">
-        <number>5</number>
+       <property name="margin">
+        <number>0</number>
        </property>
        <item>
-        <widget class="QLabel" name="graph1">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>500</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>500</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Graphe 1</string>
-         </property>
+        <widget class="QWidget" name="colGraph1" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="graph1">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Graphe 1</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveGraph1">
+            <property name="text">
+             <string>Sauvegarder</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
-        <widget class="QLabel" name="graph2">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
+        <widget class="QWidget" name="colGraph2" native="true">
          <property name="minimumSize">
           <size>
-           <width>500</width>
-           <height>200</height>
+           <width>0</width>
+           <height>250</height>
           </size>
          </property>
-         <property name="maximumSize">
-          <size>
-           <width>500</width>
-           <height>200</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Graphe 2</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QLabel" name="graph2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>500</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>500</width>
+              <height>200</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Graphe 2</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="saveGraph2">
+            <property name="text">
+             <string>Sauvegarder</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -366,7 +395,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1237</width>
+     <width>1240</width>
      <height>25</height>
     </rect>
    </property>
