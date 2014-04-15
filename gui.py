@@ -97,10 +97,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
         #TODO: maybe move this to the class Text
         #TODO: also, better display of verses numbers
-        verses = currentText.verses[currentText.begin:currentText.end+1]
-        l = [str(currentText.begin+i+1) + " " + v.text()
-            for (i, v) in enumerate(verses)]
-        self.textDisplay.setText("\n".join(l))
+        self.textDisplay.setHtml(currentText.html(True))
     
     def updateText(self):
         currentText = self.textsList.currentItem().text
@@ -130,8 +127,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         currentText = currentItem.text
 
         self.editSearch.setText(toGreek(self.editSearch.text()))
-        currentText.search(unicode(self.editSearch.text()))
-        self.searchResult.setText(str(currentText.numMatch)+u" occurence(s) trouvée(s)")
+        numMatch = currentText.search(unicode(self.editSearch.text()))
+        self.searchResult.setText(str(numMatch)+u" occurence(s) trouvée(s)")
+        self.textDisplay.setHtml(currentText.html(True))
         
         graph1 = GraphDrawer(currentText, GraphDrawer.plotGlobal)
         graph1.buildGraph()

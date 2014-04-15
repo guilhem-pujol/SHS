@@ -35,6 +35,21 @@ class Text():
     def text(self, linear = False):
         if linear: return " ".join([v.text() for v in self.verses])
         else: return "\n".join([v.text(True) for v in self.verses])
+
+    def html(self, lines = False):
+        res = ''
+        for i in range(self.begin, self.end + 1):
+            if i > self.begin:
+                res += '<br />'
+            if lines:
+                res += str(i+1) + ' '
+            v = self.verses[i]
+            if v.numMatch > 0:
+                res += '<span style="background-color: #ffff82">'
+            res += v.html()
+            if v.numMatch > 0:
+                res += '</span>'
+        return res
         
     def search(self, pattern):
         self.numMatch = 0
@@ -45,6 +60,8 @@ class Text():
             self.numMatch += v.search(pattern)
             for pos, n in v.matchByPos.iteritems():
                 self.matchByPos[pos] += n
+
+        return self.numMatch
         
 
 class Verse():
@@ -64,6 +81,9 @@ class Verse():
     def text(self, linear = False):
         if linear: return " ".join([f.text() for f in self.feet])
         else: return " | ".join([f.text(True) for f in self.feet])
+
+    def html(self):
+        return ' | '.join([foot.html() for foot in self.feet])
         
     def search(self, pattern):
         self.numMatch = sum([f.search(pattern) for f in self.feet])
@@ -111,6 +131,9 @@ class Foot():
     def text(self, linear = False):
         if linear: return " ".join([s.text for s in self.syllables])
         else: return " - ".join([s.text for s in self.syllables])
+
+    def html(self):
+      return ' - '.join([syllable.html() for syllable in self.syllables])
         
     def search(self, pattern):
         self.matchByPos = [s.search(pattern) for s in self.syllables]
@@ -134,6 +157,15 @@ class Syllable():
         
     def text(self):
         return self.text
+
+    def html(self):
+      cols = []
+      if self.numMatch > 0:
+        cols.append('<span style="color: #ff6022">')
+      cols.append(self.text)
+      if self.numMatch > 0:
+        cols.append('</span>')
+      return ''.join(cols)
         
     def search(self, pattern):
         self.numMatch = 0
@@ -141,9 +173,9 @@ class Syllable():
             isMatch = True
             for i in range(len(pattern)):
                 if pattern[i] == 'C':
-                    isMatch = not isVoyel(self.text[startPos + i])
+                    isMatch = not isVowel(self.text[startPos + i])
                 elif pattern[i] == 'V':
-                    isMatch = isVoyel(self.text[startPos + i])
+                    isMatch = isVowel(self.text[startPos + i])
                 else:
                     isMatch = (self.text[startPos + i] == pattern[i])
                 
@@ -154,5 +186,5 @@ class Syllable():
         
         return self.numMatch
         
-def isVoyel(letter):
+def isVowel(letter):
     return letter in [u'α', u'ε', u'ι', u'ο', u'υ', u'η', u'ω']
