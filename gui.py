@@ -131,11 +131,10 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.searchResult.setText(str(numMatch)+u" occurence(s) trouvée(s)")
         self.textDisplay.setHtml(currentText.html(True))
         
-        graph1 = GraphDrawer(currentText, GraphDrawer.plotGlobal)
+        graph1 = GraphDrawer([currentText], GraphDrawer.plotGlobal)
         graph1.buildGraph()
         self.graph1.setPixmap(graph1.getImage())
-        
-        graph2 = GraphDrawer(currentText, GraphDrawer.plotPositions)
+        graph2 = GraphDrawer([self.textsList.item(i).text for i in range(len(self.textsList)) if self.textsList.item(i).text.used], GraphDrawer.plotPositions)
         graph2.buildGraph()
         self.graph2.setPixmap(graph2.getImage())
         
