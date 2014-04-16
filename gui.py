@@ -46,7 +46,11 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
     def save(self, graph):
         filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", "", ".png")
-        graph.pixmap().save(filename+".png")
+        
+        if len(filename) < 4 or filename[-4:].toLower() != ".png":
+            filename += ".png"
+        
+        graph.pixmap().save(filename)
         
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Ouvrir un fichier',
