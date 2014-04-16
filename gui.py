@@ -128,9 +128,18 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
         if len(self.editSearch.text()) == 0: return
         
+        textList = [self.textsList.item(i).text for i in range(len(self.textsList)) if self.textsList.item(i).text.used]
+        
         self.editSearch.setText(toGreek(self.editSearch.text()))
-        numMatch = currentText.search(unicode(self.editSearch.text()))
-        self.searchResult.setText(str(numMatch)+u" occurence(s) trouvée(s)")
+        query = unicode(self.editSearch.text())
+        numMatchAll = 0
+        for text in textList:
+            numMatchAll += text.search(query)
+        if not currentText.used:
+            currentText.search(query)
+        numMatchFile = currentText.numMatch
+            
+        self.searchResult.setText(str(numMatchAll)+u" occurence(s) trouvée(s) dans la sélection, "+str(numMatchFile)+u" occurence(s) trouvée(s) dans ce fichier")
         self.textDisplay.setHtml(currentText.html(True))
         
         graph1 = GraphDrawer([currentText], GraphDrawer.plotGlobal)
