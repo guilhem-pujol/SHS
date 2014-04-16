@@ -81,6 +81,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
             else:
                 name = u'{}'.format(item.text.name)
             item.setText(name)
+        self.startSearch()
 
     def updateCurrentTextDisplay(self):
         currentItem = self.textsList.currentItem()
