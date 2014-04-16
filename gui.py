@@ -35,7 +35,19 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.openAction.triggered.connect(self.openNewFile)
         self.selectAll.clicked.connect(self.doSelectAll)
         self.deselectAll.clicked.connect(self.doDeselectAll)
-
+        self.saveGraph1.clicked.connect(self.save1)
+        self.saveGraph2.clicked.connect(self.save2)
+    
+    def save1(self):
+        self.save(self.graph1)
+    
+    def save2(self):
+        self.save(self.graph2)
+        
+    def save(self, graph):
+        filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", "", ".png")
+        graph.pixmap().save(filename+".png")
+        
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Ouvrir un fichier',
             os.getenv('HOME'))
