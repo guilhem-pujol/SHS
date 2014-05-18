@@ -3,37 +3,63 @@
 
 from PyQt4 import QtGui
 
+def drawRotatedText(painter, x, y, text):
+    painter.save();
+    painter.translate(x, y);
+    painter.rotate(90) 
+    painter.drawText(0, 0, text);
+    painter.restore()
+
+
 class GraphDrawer:
     plotGlobal = 0
     plotPositions = 1
     
-    def __init__(self, textList, graphType):
-        self.width = 500
-        self.height = 200
-        
+    def __init__(self, widget):
+        self.widget = widget
+        self.begin = 0
+        self.end = 0
+        self.result = [("0", 0)]
+        self.image = None
+        self.painter = None
+    
+    def getPointedVerse(self, x):
+        if x <= self.pxX0: return self.begin
+        if x > self.pxXmax: return self.end
+        return self.begin + (self.end - self.begin) * (x - self.pxX0) / (self.pxXmax - self.pxX0)
+    
+    def initParameters(self):  
+        if self.begin < 0 or self.end >= len(self.result) or self.end < self.begin:
+            raise Exception("GraphDrawer: invalid begin/end")
+    
+        self.yMax = 0
+        self.xLegendMaxLength = 0
+        for verseIndex in range(self.begin, self.end + 1):
+          self.yMax = max(self.yMax, self.result[verseIndex][1])
+          self.xLegendMaxLength = max(self.xLegendMaxLength, len(self.result[verseIndex][0]))
+
         self.marginLeft = 5
         self.marginRight = 25
         self.marginBottom = 5
         self.marginTop = 15
         
-        self.xLegendHeight = 15
+        self.xLegendHeight = max(10, 8*self.xLegendMaxLength)
         self.yLegendWidth = 30
         
-        self.xMinOffset = 0 # redefined by generateData
+        self.xMinOffset = 10
         self.yMinOffset = 10
         
-        self.textList = textList
-        self.graphType = graphType
+        self.pxXAxis = self.marginLeft + self.yLegendWidth
+        self.pxX0 = self.marginLeft + self.yLegendWidth + 5
+        self.pxXmax = self.widget.width() - self.marginRight
+        self.pxY0 = self.widget.height() - self.marginBottom - self.xLegendHeight
+        self.pxYmax = self.marginTop
+        self.pxPerVerse = float((self.pxXmax - self.pxX0)) / (self.end - self.begin + 1)
         
-        self.image = None
-    
     def buildGraph(self):
-        if self.graphType == GraphDrawer.plotGlobal:
-            self.generateDataGlobal(self.textList[0])
-        else:
-            self.generateDataPos(self.textList)
+        self.initParameters()
         
-        self.image = QtGui.QImage(self.width, self.height, 
+        self.image = QtGui.QImage(self.widget.width(), self.widget.height(), 
             QtGui.QImage.Format_RGB32)
             
         white = QtGui.QColor(255, 255, 255)
@@ -44,15 +70,7 @@ class GraphDrawer:
         self.painter.begin(self.image)
         
         self.painter.setBackground(white)
-        self.painter.eraseRect(0, 0, self.width, self.height)
-        
-        if self.yMax == 0:
-            self.painter.end()
-            return False
-        
-        self.pxX0 = self.marginLeft + self.yLegendWidth
-        self.pxXmax = self.width - self.marginRight
-        self.pxY0 = self.height - self.marginBottom - self.xLegendHeight
+        self.painter.eraseRect(0, 0, self.widget.width(), self.widget.height())
         self.pxYmax = self.marginTop
         
         self.painter.setPen(black)
@@ -62,53 +80,55 @@ class GraphDrawer:
         self.drawValues()
         
         self.painter.end()
-    
-    def getImage(self):
-        if self.image == None: return None
-        return QtGui.QPixmap.fromImage(self.image)
+        
+        self.widget.setPixmap(QtGui.QPixmap.fromImage(self.image))
 
     def drawAxis(self):
         # x-axis
-        self.painter.drawLine(self.pxX0, self.pxY0, self.pxXmax, self.pxY0)
+        self.painter.drawLine(self.pxXAxis, self.pxY0, self.pxXmax, self.pxY0)
         
         # y-axis
-        self.painter.drawLine(self.pxX0, self.pxY0, self.pxX0, self.pxYmax)
+        self.painter.drawLine(self.pxXAxis, self.pxY0, self.pxXAxis, self.pxYmax)
         
         # x graduations
         oldX = -self.xMinOffset
-        for i, xVal in enumerate(self.xValues):
-            x = self.pxX0 + (i + 1) * (self.pxXmax - self.pxX0) / len(self.xValues)
+        for verseIndex in range(self.begin, self.end + 1):
+            x = self.pxX0 + (verseIndex - self.begin) * self.pxPerVerse
             if x >= oldX + self.xMinOffset:
                 self.painter.drawLine(x, self.pxY0 - 2, x, self.pxY0 + 2)
-                self.painter.drawText(x, self.pxY0 + self.xLegendHeight, str(xVal))
+                drawRotatedText(self.painter, x, self.pxY0 + 2, self.result[verseIndex][0])
                 oldX = x
             
         # y graduations
-        oldY = self.height + self.yMinOffset
+        if(self.yMax == 0): return
+        oldY = self.widget.height() + self.yMinOffset
         for i in range(self.yMax + 1):
             y = self.pxY0 + i * (self.pxYmax - self.pxY0) / self.yMax
             if y <= oldY - self.yMinOffset:
-                self.painter.drawLine(self.pxX0 - 2, y, self.pxX0 + 2, y)
-                self.painter.drawText(self.pxX0 - self.yLegendWidth, y + 5, str(i))
+                self.painter.drawLine(self.pxXAxis - 2, y, self.pxXAxis + 2, y)
+                self.painter.drawText(self.pxXAxis - self.yLegendWidth, y + 5, str(i))
                 oldY = y
         
     def drawValues(self):
-        for i, yVal in enumerate(self.yValues):
-            x = self.pxX0 + (i + 1) * (self.pxXmax - self.pxX0) / len(self.xValues)
-            y = self.pxY0 + yVal * (self.pxYmax - self.pxY0) / self.yMax
-            self.painter.drawLine(x, self.pxY0, x, y)
-
-    def generateDataGlobal(self, text):
-        self.xValues = range(text.begin + 1, text.end + 2)
-        self.yValues = [text.verses[x - 1].numMatch for x in self.xValues]
+        if(self.yMax == 0): return
+    
+        currentSum = 0
+        currentNumber = 0
+        previousX = self.pxX0
         
-        self.xMinOffset = 10 * max([len(str(x)) for x in self.xValues])
-        self.yMax = max(self.yValues)
-        
-    def generateDataPos(self, textList):
-        self.xValues = sorted(textList[0].matchByPos.keys())
-        self.yValues = [sum([text.matchByPos[x] for text in textList]) for x in self.xValues]
-                    
-        self.xMinOffset = 10 * max([len(str(x)) for x in self.xValues])
-        self.yMax = max(self.yValues)
-
+        for verseIndex in range(self.begin, self.end + 1):
+            x = int(self.pxX0 + (verseIndex - self.begin) * self.pxPerVerse)
+            if x != previousX:
+              y = self.pxY0 + (currentSum * (self.pxYmax - self.pxY0)) / (currentNumber * self.yMax)
+              self.painter.drawLine(previousX, self.pxY0, previousX, y)
+              currentSum = 0
+              currentNumber = 0
+            
+            currentSum += self.result[verseIndex][1]
+            currentNumber += 1
+            
+            if verseIndex == self.end:
+              y = self.pxY0 + (currentSum * (self.pxYmax - self.pxY0)) / (currentNumber * self.yMax)
+              self.painter.drawLine(x, self.pxY0, x, y)
+            
+            previousX = x

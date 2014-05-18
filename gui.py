@@ -23,6 +23,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
         #FIXME: not sure this attribute is useful
         self.texts = {}
+        
+        self.graphDrawer1 = GraphDrawer(self.graph1)
+        self.graphDrawer2 = GraphDrawer(self.graph2)
     
     def setupSignals(self):
         #FIXME: this is the old API style, see how to use new method
@@ -34,6 +37,24 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.openAction.triggered.connect(self.openNewFile)
         self.saveGraph1.clicked.connect(self.save1)
         self.saveGraph2.clicked.connect(self.save2)
+        self.graph1.wheelEvent = self.graphZoomHandler
+        
+    def graphZoomHandler(self, wheelEvent):
+        if wheelEvent.delta() > 0:
+          zoomFactor = 2.0
+        else:
+          zoomFactor = 0.5
+        
+        verseIndex = self.graphDrawer1.getPointedVerse(wheelEvent.x())
+        n = (self.graphDrawer1.end - self.graphDrawer1.begin) + 1
+        newBegin = verseIndex - (1 + n / 2) / zoomFactor
+        newEnd = verseIndex + (1 + n / 2) / zoomFactor
+        if newBegin < 0: newBegin = 0
+        if newEnd >= len(self.graphDrawer1.result): newEnd = len(self.graphDrawer1.result) - 1
+
+        self.graphDrawer1.begin = int(newBegin)
+        self.graphDrawer1.end = int(newEnd)
+        self.graphDrawer1.buildGraph()
     
     def save1(self):
         self.save(self.graph1)
@@ -128,11 +149,17 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
             
         self.searchResult.setText(str(numMatchFile)+u" occurence(s) trouvée(s)")
         self.textDisplay.setHtml(currentText.html(True))
+      
+        result1 = [("verseId", 100), ("otherverseId", 42)]
+        result2 = [("posId", 1)]
         
-        graph1 = GraphDrawer([currentText], GraphDrawer.plotGlobal)
-        graph1.buildGraph()
-        self.graph1.setPixmap(graph1.getImage())
-        graph2 = GraphDrawer([currentText], GraphDrawer.plotPositions)
-        graph2.buildGraph()
-        self.graph2.setPixmap(graph2.getImage())
+        self.graphDrawer1.result = result1
+        self.graphDrawer1.begin = 0
+        self.graphDrawer1.end = len(result1) - 1
+        self.graphDrawer2.result = result2
+        self.graphDrawer2.begin = 0
+        self.graphDrawer2.end = len(result2) - 1
+        
+        self.graphDrawer1.buildGraph()
+        self.graphDrawer2.buildGraph()
         
