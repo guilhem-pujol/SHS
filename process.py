@@ -18,17 +18,17 @@ class Position:
   D2 = 4
 
   def __init__(self, verse, foot, syllable):
-    self.verse = verse
-    self.foot = foot
-    self.syllable = syllable
-    self.syllable_str = Position.syllable_to_str(foot, syllable)
+  self.verse = verse
+  self.foot = foot
+  self.syllable = syllable
+  self.syllable_str = Position.syllable_to_str(foot, syllable)
   
   @staticmethod
   def syllable_to_str(foot, syllable):
-    return str(foot+1) + (
-      '0' if syllable == 1 else
-      str(syllable - 2) if syllable > 2 else
-      '')
+  return str(foot+1) + (
+    '0' if syllable == 1 else
+    str(syllable - 2) if syllable > 2 else
+    '')
 
 
 def get_file(file):
@@ -100,8 +100,8 @@ sums = [0]*3
 
 def without_symbols(s):
   for c in s:
-    if ord(c) in [32, 44, 46, 180, 59, 183]:
-      return False
+  if ord(c) in [32, 44, 46, 180, 59, 183]:
+    return False
   return True
 
 vowels = u'αειουηω'
@@ -109,35 +109,35 @@ vowels = u'αειουηω'
 def to_vc_pattern(s):
   res = u''
   for c in s:
-    if c in vowels:
-      res += 'v'
-    else:
-      res += 'c'
+  if c in vowels:
+    res += 'v'
+  else:
+    res += 'c'
   return res
 
 for (vid, (metre, feet)) in enumerate(verses):
   for (fid, foot) in enumerate(feet):
-    if len(foot) == 2:
-      sid = Position.S0 - 1
-    else:
-      sid = Position.D0 - 1
-    for syllable in foot:
-      sid += 1
-      p = Position(vid, fid, sid)
-      for k in range(4):
-        for i in range(len(syllable) - k):
-          s = syllable[i:i+k+1]
-          if without_symbols(s):
-            if k < 3:
-              occ[k][s] += 1
-              sums[k] += 1
-              pos[k][s].append(p)
-            mixed_pos[s].append(p)
-      if without_symbols(syllable):
-        pattern = to_vc_pattern(syllable)
-        if u'v' in pattern:
-          mixed_pos[pattern].append(p)
-          patterns_pos[pattern].append(p)
+  if len(foot) == 2:
+    sid = Position.S0 - 1
+  else:
+    sid = Position.D0 - 1
+  for syllable in foot:
+    sid += 1
+    p = Position(vid, fid, sid)
+    for k in range(4):
+    for i in range(len(syllable) - k):
+      s = syllable[i:i+k+1]
+      if without_symbols(s):
+      if k < 3:
+        occ[k][s] += 1
+        sums[k] += 1
+        pos[k][s].append(p)
+      mixed_pos[s].append(p)
+    if without_symbols(syllable):
+    pattern = to_vc_pattern(syllable)
+    if u'v' in pattern:
+      mixed_pos[pattern].append(p)
+      patterns_pos[pattern].append(p)
 
 ### Statistical functions
 
@@ -147,26 +147,26 @@ def moving_verse(l, n):
   idx = 0
   res = []
   for vid in range(len(verses)):
-    while idx < len(l) and l[idx].verse <= vid + n/2:
-      q.append(l[idx].verse)
-      nb += 1
-      idx += 1
-    while len(q) > 0 and q[0] < vid - n/2:
-      q.popleft()
-      nb -= 1
-    res.append(nb)
+  while idx < len(l) and l[idx].verse <= vid + n/2:
+    q.append(l[idx].verse)
+    nb += 1
+    idx += 1
+  while len(q) > 0 and q[0] < vid - n/2:
+    q.popleft()
+    nb -= 1
+  res.append(nb)
   return res
 
 def syllables(l):
   res = dict()
   for foot in range(6):
-    for syllable in range(Position.S0, Position.D2+1):
-      if foot == 5 and syllable >= Position.D0:
-        continue
-      res[Position.syllable_to_str(foot, syllable)] = 0
+  for syllable in range(Position.S0, Position.D2+1):
+    if foot == 5 and syllable >= Position.D0:
+    continue
+    res[Position.syllable_to_str(foot, syllable)] = 0
 
   for p in l:
-    res[p.syllable_str] += 1
+  res[p.syllable_str] += 1
 
   return res
 
@@ -195,7 +195,7 @@ print 'Patterns sorted by frequency'
 print ','.join(sorted_patterns).encode('utf-8')
 print
 
-print 'For each "interesting" n-grams and patterns, moving frequency and frequency per syllable'
+print 'For each 'interesting' n-grams and patterns, moving frequency and frequency per syllable'
 print
 
 todo = [x for sub in most_frequent for x in sub] + sorted_patterns
@@ -203,11 +203,11 @@ for k in todo:
   print k.encode('utf-8')
   print 'Moving frequency over 10 verses'
   for (i, nb) in enumerate(moving_verse(mixed_pos[k], 10)):
-    print '{},{}'.format(i+1, nb)
+  print '{},{}'.format(i+1, nb)
   print 'Frequency per syllable'
   l = syllables(mixed_pos[k]).items()
   l.sort()
   for (s, nb) in l:
-    print '{},{}'.format(s, nb)
+  print '{},{}'.format(s, nb)
 
 
