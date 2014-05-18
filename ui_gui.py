@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Wed Apr 16 00:24:21 2014
-#      by: PyQt4 UI code generator 4.9.1
+# Created: Sun May 18 18:09:06 2014
+#      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -77,7 +86,6 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtGui.QHBoxLayout(self.bar2)
         self.horizontalLayout.setSpacing(3)
         self.horizontalLayout.setMargin(0)
-        self.horizontalLayout.setMargin(0)
         self.horizontalLayout.setObjectName(_fromUtf8("horizontalLayout"))
         self.colGraph1 = QtGui.QWidget(self.bar2)
         self.colGraph1.setObjectName(_fromUtf8("colGraph1"))
@@ -125,31 +133,32 @@ class Ui_MainWindow(object):
         self.bar3.setMinimumSize(QtCore.QSize(0, 50))
         self.bar3.setMaximumSize(QtCore.QSize(16777215, 50))
         self.bar3.setObjectName(_fromUtf8("bar3"))
-        self.horizontalLayout_4 = QtGui.QHBoxLayout(self.bar3)
-        self.horizontalLayout_4.setMargin(0)
-        self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
-        self.used = QtGui.QCheckBox(self.bar3)
-        self.used.setObjectName(_fromUtf8("used"))
-        self.horizontalLayout_4.addWidget(self.used)
+        self.horizontalLayout_3 = QtGui.QHBoxLayout(self.bar3)
+        self.horizontalLayout_3.setMargin(0)
+        self.horizontalLayout_3.setObjectName(_fromUtf8("horizontalLayout_3"))
+        self.textFrom = QtGui.QLabel(self.bar3)
+        self.textFrom.setMinimumSize(QtCore.QSize(50, 30))
+        self.textFrom.setMaximumSize(QtCore.QSize(50, 30))
+        self.textFrom.setObjectName(_fromUtf8("textFrom"))
+        self.horizontalLayout_3.addWidget(self.textFrom)
         self.editBegin = QtGui.QLineEdit(self.bar3)
         self.editBegin.setMinimumSize(QtCore.QSize(50, 30))
         self.editBegin.setMaximumSize(QtCore.QSize(50, 30))
         self.editBegin.setText(_fromUtf8(""))
         self.editBegin.setObjectName(_fromUtf8("editBegin"))
-        self.horizontalLayout_4.addWidget(self.editBegin)
+        self.horizontalLayout_3.addWidget(self.editBegin)
         self.textTo = QtGui.QLabel(self.bar3)
         self.textTo.setMinimumSize(QtCore.QSize(80, 30))
         self.textTo.setMaximumSize(QtCore.QSize(80, 30))
         self.textTo.setObjectName(_fromUtf8("textTo"))
-        self.horizontalLayout_4.addWidget(self.textTo)
+        self.horizontalLayout_3.addWidget(self.textTo)
         self.editEnd = QtGui.QLineEdit(self.bar3)
         self.editEnd.setMinimumSize(QtCore.QSize(50, 30))
         self.editEnd.setMaximumSize(QtCore.QSize(50, 30))
         self.editEnd.setObjectName(_fromUtf8("editEnd"))
-        self.horizontalLayout_4.addWidget(self.editEnd)
+        self.horizontalLayout_3.addWidget(self.editEnd)
         spacerItem2 = QtGui.QSpacerItem(619, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem2)
-        self.horizontalLayout_4.setStretch(4, 1)
+        self.horizontalLayout_3.addItem(spacerItem2)
         self.verticalLayout_2.addWidget(self.bar3)
         self.textDisplay = QtGui.QTextEdit(self.centralWidget)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
@@ -165,7 +174,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addWidget(self.textDisplay)
         MainWindow.setCentralWidget(self.centralWidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
-        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1240, 25))
+        self.menuBar.setGeometry(QtCore.QRect(0, 0, 1240, 27))
         self.menuBar.setObjectName(_fromUtf8("menuBar"))
         self.menuFile = QtGui.QMenu(self.menuBar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -186,12 +195,6 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QtGui.QVBoxLayout(self.dockWidgetContents_2)
         self.verticalLayout_3.setContentsMargins(3, -1, 3, -1)
         self.verticalLayout_3.setObjectName(_fromUtf8("verticalLayout_3"))
-        self.selectAll = QtGui.QPushButton(self.dockWidgetContents_2)
-        self.selectAll.setObjectName(_fromUtf8("selectAll"))
-        self.verticalLayout_3.addWidget(self.selectAll)
-        self.deselectAll = QtGui.QPushButton(self.dockWidgetContents_2)
-        self.deselectAll.setObjectName(_fromUtf8("deselectAll"))
-        self.verticalLayout_3.addWidget(self.deselectAll)
         self.textsList = QtGui.QListWidget(self.dockWidgetContents_2)
         self.textsList.setMinimumSize(QtCore.QSize(200, 0))
         self.textsList.setMaximumSize(QtCore.QSize(16777215, 16777215))
@@ -214,30 +217,26 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Analyse fréquentielle de textes", None, QtGui.QApplication.UnicodeUTF8))
-        self.textSearch.setText(QtGui.QApplication.translate("MainWindow", "Motif :", None, QtGui.QApplication.UnicodeUTF8))
-        self.searchResult.setText(QtGui.QApplication.translate("MainWindow", "Résultat", None, QtGui.QApplication.UnicodeUTF8))
-        self.graph1.setText(QtGui.QApplication.translate("MainWindow", "Graphe 1", None, QtGui.QApplication.UnicodeUTF8))
-        self.saveGraph1.setText(QtGui.QApplication.translate("MainWindow", "Sauvegarder", None, QtGui.QApplication.UnicodeUTF8))
-        self.graph2.setText(QtGui.QApplication.translate("MainWindow", "Graphe 2", None, QtGui.QApplication.UnicodeUTF8))
-        self.saveGraph2.setText(QtGui.QApplication.translate("MainWindow", "Sauvegarder", None, QtGui.QApplication.UnicodeUTF8))
-        self.used.setText(QtGui.QApplication.translate("MainWindow", "Utiliser ce texte du vers", None, QtGui.QApplication.UnicodeUTF8))
-        self.textTo.setText(QtGui.QApplication.translate("MainWindow", "jusqu\'au vers", None, QtGui.QApplication.UnicodeUTF8))
-        self.textDisplay.setHtml(QtGui.QApplication.translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+        MainWindow.setWindowTitle(_translate("MainWindow", "Analyse fréquentielle de textes", None))
+        self.textSearch.setText(_translate("MainWindow", "Motif :", None))
+        self.searchResult.setText(_translate("MainWindow", "Résultat", None))
+        self.graph1.setText(_translate("MainWindow", "Graphe 1", None))
+        self.saveGraph1.setText(_translate("MainWindow", "Sauvegarder", None))
+        self.graph2.setText(_translate("MainWindow", "Graphe 2", None))
+        self.saveGraph2.setText(_translate("MainWindow", "Sauvegarder", None))
+        self.textFrom.setText(_translate("MainWindow", "Du vers", None))
+        self.textTo.setText(_translate("MainWindow", "jusqu\'au vers", None))
+        self.textDisplay.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "&Fichier", None, QtGui.QApplication.UnicodeUTF8))
-        self.dockWidget_2.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Textes ouverts", None, QtGui.QApplication.UnicodeUTF8))
-        self.selectAll.setText(QtGui.QApplication.translate("MainWindow", "Tout sélectionner", None, QtGui.QApplication.UnicodeUTF8))
-        self.selectAll.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+A", None, QtGui.QApplication.UnicodeUTF8))
-        self.deselectAll.setText(QtGui.QApplication.translate("MainWindow", "Tout déselectionner", None, QtGui.QApplication.UnicodeUTF8))
-        self.deselectAll.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+Shift+A", None, QtGui.QApplication.UnicodeUTF8))
-        self.openAction.setText(QtGui.QApplication.translate("MainWindow", "&Ouvrir", None, QtGui.QApplication.UnicodeUTF8))
-        self.openAction.setStatusTip(QtGui.QApplication.translate("MainWindow", "Ouvrir un fichier", None, QtGui.QApplication.UnicodeUTF8))
-        self.openAction.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+O", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitAction.setText(QtGui.QApplication.translate("MainWindow", "&Quitter", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitAction.setStatusTip(QtGui.QApplication.translate("MainWindow", "Quitter le programme", None, QtGui.QApplication.UnicodeUTF8))
-        self.exitAction.setShortcut(QtGui.QApplication.translate("MainWindow", "Ctrl+W", None, QtGui.QApplication.UnicodeUTF8))
+"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+        self.menuFile.setTitle(_translate("MainWindow", "&Fichier", None))
+        self.dockWidget_2.setWindowTitle(_translate("MainWindow", "Textes ouverts", None))
+        self.openAction.setText(_translate("MainWindow", "&Ouvrir", None))
+        self.openAction.setStatusTip(_translate("MainWindow", "Ouvrir un fichier", None))
+        self.openAction.setShortcut(_translate("MainWindow", "Ctrl+O", None))
+        self.exitAction.setText(_translate("MainWindow", "&Quitter", None))
+        self.exitAction.setStatusTip(_translate("MainWindow", "Quitter le programme", None))
+        self.exitAction.setShortcut(_translate("MainWindow", "Ctrl+W", None))
 

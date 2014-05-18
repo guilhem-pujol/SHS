@@ -18,7 +18,6 @@ class Text():
         
         self.begin = 0
         self.end = 0
-        self.used = True
         
     def addVerse(self, verse):
         if verse.__class__ == Verse:

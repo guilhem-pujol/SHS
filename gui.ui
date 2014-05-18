@@ -275,11 +275,23 @@
         <height>50</height>
        </size>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,0,0,0,1">
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QCheckBox" name="used">
+        <widget class="QLabel" name="textFrom">
+         <property name="minimumSize">
+          <size>
+           <width>50</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>30</height>
+          </size>
+         </property>
          <property name="text">
-          <string>Utiliser ce texte du vers</string>
+          <string>Du vers</string>
          </property>
         </widget>
        </item>
@@ -396,7 +408,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1240</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -448,26 +460,6 @@ p, li { white-space: pre-wrap; }
      <property name="rightMargin">
       <number>3</number>
      </property>
-     <item>
-      <widget class="QPushButton" name="selectAll">
-       <property name="text">
-        <string>Tout sélectionner</string>
-       </property>
-       <property name="shortcut">
-        <string>Ctrl+A</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="deselectAll">
-       <property name="text">
-        <string>Tout déselectionner</string>
-       </property>
-       <property name="shortcut">
-        <string>Ctrl+Shift+A</string>
-       </property>
-      </widget>
-     </item>
      <item>
       <widget class="QListWidget" name="textsList">
        <property name="minimumSize">
