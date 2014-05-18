@@ -90,16 +90,16 @@ class TextDisplay(QtGui.QTableWidget):
 class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-        
+
         self.setupUi(self)
         self.setupSignals()
-        
+
         #FIXME: not sure this attribute is useful
         self.texts = {}
-        
+
         self.graphDrawer1 = GraphDrawer(self.graph1)
         self.graphDrawer2 = GraphDrawer(self.graph2)
-    
+
     def setupSignals(self):
         #FIXME: this is the old API style, see how to use new method
         self.textsList.currentItemChanged.connect(self.updateDisplay)
@@ -111,13 +111,13 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.saveGraph1.clicked.connect(self.save1)
         self.saveGraph2.clicked.connect(self.save2)
         self.graph1.wheelEvent = self.graphZoomHandler
-        
+
     def graphZoomHandler(self, wheelEvent):
         if wheelEvent.delta() > 0:
           zoomFactor = 2.0
         else:
           zoomFactor = 0.5
-        
+
         verseIndex = self.graphDrawer1.getPointedVerse(wheelEvent.x())
         n = (self.graphDrawer1.end - self.graphDrawer1.begin) + 1
         newBegin = verseIndex - (1 + n / 2) / zoomFactor
@@ -128,40 +128,40 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.graphDrawer1.begin = int(newBegin)
         self.graphDrawer1.end = int(newEnd)
         self.graphDrawer1.buildGraph()
-    
+
     def save1(self):
         self.save(self.graph1)
-    
+
     def save2(self):
         self.save(self.graph2)
-        
+
     def save(self, graph):
         filename = QtGui.QFileDialog.getSaveFileName(self, "Save file", "", ".png")
-        
+
         if len(filename) < 4 or filename[-4:].toLower() != ".png":
             filename += ".png"
-        
+
         graph.pixmap().save(filename)
-        
+
     def openNewFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self, 'Ouvrir un fichier',
             os.getenv('HOME'))
         self.loadFile(filename)
-    
+
     def loadFile(self, filename):
         if filename == "": return None
         #TODO: better handling of this case
         if filename in self.texts: return None
-        
+
         newText = getFile(filename)
         newDisplay = TextDisplay(newText)
         self.textDisplay.addWidget(newDisplay)
         newItem = TextItem(newText, filename, newDisplay)
         self.texts[filename] = newItem
-        
+
         self.textsList.addItem(newItem)
         self.textsList.setCurrentItem(newItem)
-        
+
         self.updateDisplay()
 
     def updateDisplay(self):
@@ -180,7 +180,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         self.editBegin.setText(str(currentText.begin + 1))
         self.editEnd.setText(str(currentText.end + 1))
         self.setWindowTitle(currentText.name)
-    
+
     def updateText(self):
         currentText = self.textsList.currentItem().text
         if self.editBegin.text() == '' or self.editEnd.text() == '':
@@ -192,38 +192,38 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         end -= 1
         if end >= len(currentText.verses): return
         if begin > end: return
-        
+
         currentText.begin = begin
         currentText.end = end
-        
+
         self.updateDisplay()
         self.startSearch()
-    
+
     def startSearch(self):
         currentItem = self.textsList.currentItem()
         if currentItem == None: return
         currentText = currentItem.text
-        
+
         if len(self.editSearch.text()) == 0: return
-        
+
         self.editSearch.setText(toGreek(self.editSearch.text()))
         query = unicode(self.editSearch.text())
-        
+
         currentText.search(query)
         numMatchFile = currentText.numMatch
-            
+
         self.searchResult.setText(str(numMatchFile)+u" occurence(s) trouvée(s)")
         self.textDisplay.currentWidget().update()
-      
+
         result1 = [("verseId", 100), ("otherverseId", 42)]
         result2 = [("posId", 1)]
-        
+
         self.graphDrawer1.result = result1
         self.graphDrawer1.begin = 0
         self.graphDrawer1.end = len(result1) - 1
         self.graphDrawer2.result = result2
         self.graphDrawer2.begin = 0
         self.graphDrawer2.end = len(result2) - 1
-        
+
         self.graphDrawer1.buildGraph()
         self.graphDrawer2.buildGraph()

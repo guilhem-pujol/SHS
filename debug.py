@@ -10,7 +10,7 @@ def toASCII(greek_str):
     result = reduce(lambda x, (s, r): x.replace(s, r), zip(greekChars, asciiChars), greek_str)
     result = filter(lambda x: x in string.printable, result)
     return result
-    
+
 def toGreek(ascii_str):
     result = reduce(lambda x, (s, r): x.replace(s, r), zip(asciiChars, greekChars), ascii_str)
     return result

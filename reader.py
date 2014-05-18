@@ -24,22 +24,22 @@ def getFile(filename):
     f = open(filename, 'r')
     content = f.read().decode('utf-8')
     content = sanitize(content)
-    
+
     result = Text(ntpath.basename(str(filename)))
     for line in content.split("\n"):
         verse = buildVerseFromLine(line)
         if verse != None:
             result.addVerse(verse)
-    
+
     return result
-    
+
 def buildVerseFromLine(line):
     line = line.replace("|", "-")
     lineData = line.split("\t")
     if len(lineData) < 5: return None
     (metrics, syllables) = (lineData[3], lineData[4].split("-"))
     name = lineData[0]
-    
+
     pos = 0
     feet = []
     for metricData in metrics:
@@ -51,15 +51,15 @@ def buildVerseFromLine(line):
             metric = Foot.spondee
         else:
             raise InputError("Unknown metric : \""+metricData+"\"")
-        
+
         if len(syllables) < pos + len(expected):
             raise InputError("Too few syllables to match given metric")
-        
+
         feet.append(Foot(
             [Syllable(syllables[pos+i], x) for (i,x) in enumerate(expected)],
             metric))
-        
+
         pos += len(expected)
-        
+
     return Verse(name, feet)
-        
+
