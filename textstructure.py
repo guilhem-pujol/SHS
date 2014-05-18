@@ -64,7 +64,8 @@ class Text():
         
 
 class Verse():
-    def __init__(self, feet):
+    def __init__(self, name, feet):
+        self.name = name
         self.feet = []
         for f in feet:
             if f.__class__ == Foot:

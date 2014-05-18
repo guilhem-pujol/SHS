@@ -6,13 +6,86 @@ import os
 from reader import getFile
 from debug import toGreek
 from graph import GraphDrawer
+from textstructure import Foot
 import ui_gui
 
 class TextItem(QtGui.QListWidgetItem):
-    def __init__(self, text, fullName):
+    def __init__(self, text, fullName, display):
         super(TextItem, self).__init__(text.name)
         self.fullName = fullName
         self.text = text
+        self.display = display
+
+class TextDisplay(QtGui.QTableWidget):
+
+    yellow = QtGui.QColor('#ffff82')
+    red = QtGui.QColor('#ff6022')
+
+    def __init__(self, text):
+        super(TextDisplay, self).__init__()
+        self.text = text
+        self.setMinimumSize(QtCore.QSize(1020, 0))
+        self.setMaximumSize(QtCore.QSize(1020, 16777215))
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+        self.setRowCount(len(self.text.verses))
+        self.setColumnCount(18)
+        self.horizontalHeader().setVisible(True)
+        self.horizontalHeader().setDefaultSectionSize(55)
+        self.verticalHeader().setVisible(False)
+
+        self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        self.setSelectionMode(QtGui.QAbstractItemView.NoSelection)
+
+        self.verticalScrollBar().valueChanged.connect(self.update)
+
+        for i in range(self.rowCount()):
+            v = self.text.verses[i]
+            item = QtGui.QTableWidgetItem(v.name)
+            self.setItem(i, 0, item)
+            for j in range(6):
+                f = v.feet[j]
+                if f.metric == Foot.spondee:
+                    self.setSpan(i, 2+j*3, 1, 2)
+                    l = 2
+                else:
+                    l = 3
+                for k in range(l):
+                    item = QtGui.QTableWidgetItem(f.syllables[k].text)
+                    self.setItem(i, 1+j*3+k, item)
+
+    def update(self):
+        header = self.verticalHeader()
+        start = header.visualIndexAt(0)-1
+        end = header.visualIndexAt(self.height())
+        if start == -1:
+            start = 0
+        if end == -1:
+            end = self.rowCount() - 1
+        self.updateLines(start, end)
+
+    def updateLines(self, start, end):
+        for i in range(start, end+1):
+            v = self.text.verses[i]
+            if v.numMatch > 0:
+                background = TextDisplay.yellow
+            else:
+                background = QtCore.Qt.white
+            self.item(i, 0).setBackground(background)
+            for j in range(6):
+                f = v.feet[j]
+                if f.metric == Foot.dactyl:
+                    l = 3
+                else:
+                    l = 2
+                for k in range(l):
+                    s = f.syllables[k]
+                    if s.numMatch > 0:
+                        foreground = TextDisplay.red
+                    else:
+                        foreground = QtCore.Qt.black
+                    item = self.item(i, 1+j*3+k)
+                    item.setForeground(foreground)
+                    item.setBackground(background)
 
 class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     def __init__(self):
@@ -81,7 +154,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         if filename in self.texts: return None
         
         newText = getFile(filename)
-        newItem = TextItem(newText, filename)
+        newDisplay = TextDisplay(newText)
+        self.textDisplay.addWidget(newDisplay)
+        newItem = TextItem(newText, filename, newDisplay)
         self.texts[filename] = newItem
         
         self.textsList.addItem(newItem)
@@ -91,13 +166,6 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
 
     def updateDisplay(self):
         self.updateCurrentTextDisplay()
-        for i in range(len(self.textsList)):
-            item = self.textsList.item(i)
-
-            font = item.font()
-            item.setFont(font)
-            name = u'{}'.format(item.text.name)
-            item.setText(name)
         self.startSearch()
 
     def updateCurrentTextDisplay(self):
@@ -106,15 +174,12 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
           self.centralWidget.setEnabled(False)
           return
         self.centralWidget.setEnabled(True)
+        self.textDisplay.setCurrentWidget(currentItem.display)
         currentText = currentItem.text
 
         self.editBegin.setText(str(currentText.begin + 1))
         self.editEnd.setText(str(currentText.end + 1))
         self.setWindowTitle(currentText.name)
-        
-        #TODO: maybe move this to the class Text
-        #TODO: also, better display of verses numbers
-        self.textDisplay.setHtml(currentText.html(True))
     
     def updateText(self):
         currentText = self.textsList.currentItem().text
@@ -148,7 +213,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         numMatchFile = currentText.numMatch
             
         self.searchResult.setText(str(numMatchFile)+u" occurence(s) trouvée(s)")
-        self.textDisplay.setHtml(currentText.html(True))
+        self.textDisplay.currentWidget().update()
       
         result1 = [("verseId", 100), ("otherverseId", 42)]
         result2 = [("posId", 1)]
@@ -162,4 +227,3 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
         
         self.graphDrawer1.buildGraph()
         self.graphDrawer2.buildGraph()
-        

@@ -38,6 +38,7 @@ def buildVerseFromLine(line):
     lineData = line.split("\t")
     if len(lineData) < 5: return None
     (metrics, syllables) = (lineData[3], lineData[4].split("-"))
+    name = lineData[0]
     
     pos = 0
     feet = []
@@ -60,5 +61,5 @@ def buildVerseFromLine(line):
         
         pos += len(expected)
         
-    return Verse(feet)
+    return Verse(name, feet)
         

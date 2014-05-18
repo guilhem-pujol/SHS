@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Sun May 18 18:09:06 2014
+# Created: Sun May 18 19:29:22 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -160,17 +160,14 @@ class Ui_MainWindow(object):
         spacerItem2 = QtGui.QSpacerItem(619, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem2)
         self.verticalLayout_2.addWidget(self.bar3)
-        self.textDisplay = QtGui.QTextEdit(self.centralWidget)
-        sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.textDisplay.sizePolicy().hasHeightForWidth())
-        self.textDisplay.setSizePolicy(sizePolicy)
-        self.textDisplay.setMinimumSize(QtCore.QSize(1020, 0))
-        self.textDisplay.setMaximumSize(QtCore.QSize(1020, 16777215))
-        self.textDisplay.setReadOnly(True)
-        self.textDisplay.setAcceptRichText(True)
+        self.textDisplay = QtGui.QStackedWidget(self.centralWidget)
         self.textDisplay.setObjectName(_fromUtf8("textDisplay"))
+        self.page = QtGui.QWidget()
+        self.page.setObjectName(_fromUtf8("page"))
+        self.textDisplay.addWidget(self.page)
+        self.page_2 = QtGui.QWidget()
+        self.page_2.setObjectName(_fromUtf8("page_2"))
+        self.textDisplay.addWidget(self.page_2)
         self.verticalLayout_2.addWidget(self.textDisplay)
         MainWindow.setCentralWidget(self.centralWidget)
         self.menuBar = QtGui.QMenuBar(MainWindow)
@@ -226,11 +223,6 @@ class Ui_MainWindow(object):
         self.saveGraph2.setText(_translate("MainWindow", "Sauvegarder", None))
         self.textFrom.setText(_translate("MainWindow", "Du vers", None))
         self.textTo.setText(_translate("MainWindow", "jusqu\'au vers", None))
-        self.textDisplay.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Droid Sans\'; font-size:10pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.menuFile.setTitle(_translate("MainWindow", "&Fichier", None))
         self.dockWidget_2.setWindowTitle(_translate("MainWindow", "Textes ouverts", None))
         self.openAction.setText(_translate("MainWindow", "&Ouvrir", None))
