@@ -149,6 +149,7 @@ class Syllable():
             raise StructureError("Syllable(): unknown type")
         
         self.text = text    
+        self.letters = filter(lambda c: not isSpecial(c), text)
         self.syl_type = syl_type
         self.numMatch = 0
 
@@ -169,15 +170,15 @@ class Syllable():
         
     def search(self, pattern):
         self.numMatch = 0
-        for startPos in range(len(self.text) - len(pattern) + 1):
+        for startPos in range(len(self.letters) - len(pattern) + 1):
             isMatch = True
             for i in range(len(pattern)):
                 if pattern[i] == 'C':
-                    isMatch = not isVowel(self.text[startPos + i])
+                    isMatch = not isVowel(self.letters[startPos + i])
                 elif pattern[i] == 'V':
-                    isMatch = isVowel(self.text[startPos + i])
+                    isMatch = isVowel(self.letters[startPos + i])
                 else:
-                    isMatch = (self.text[startPos + i] == pattern[i])
+                    isMatch = (self.letters[startPos + i] == pattern[i])
                 
                 if not isMatch: break
             
@@ -185,6 +186,9 @@ class Syllable():
                 self.numMatch += 1
         
         return self.numMatch
-        
+
+def isSpecial(letter):
+    return ord(letter) in [32, 44, 46, 180, 59, 183]
+
 def isVowel(letter):
     return letter in [u'α', u'ε', u'ι', u'ο', u'υ', u'η', u'ω']
