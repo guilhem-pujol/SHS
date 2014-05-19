@@ -136,8 +136,10 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     if currentItem == None: return
     currentText = currentItem.text
     self.stats = currentText.stats()
-    self.statsText = currentText.name
-    self.statsRange = 'blih'
+    self.statsText.setText(currentText.name)
+    b = currentText.beginText
+    e = currentText.endText
+    self.statsRange.setText(u'De ' + b + u' à ' + e)
     self.updateStatsDisplay()
 
   def updateStatsDisplay(self):
