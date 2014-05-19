@@ -135,4 +135,4 @@ class GraphDrawer:
       previousX = x
       
   def drawTitle(self):
-    self.painter.drawText(15, 12, self.title)
+    self.painter.drawText(20, 12, self.title)
