@@ -90,7 +90,7 @@
            <height>50</height>
           </size>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,1">
           <property name="sizeConstraint">
            <enum>QLayout::SetDefaultConstraint</enum>
           </property>
@@ -161,13 +161,13 @@
            <widget class="QLineEdit" name="editBegin">
             <property name="minimumSize">
              <size>
-              <width>50</width>
+              <width>100</width>
               <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
+              <width>100</width>
               <height>30</height>
              </size>
             </property>
@@ -199,15 +199,34 @@
            <widget class="QLineEdit" name="editEnd">
             <property name="minimumSize">
              <size>
-              <width>50</width>
+              <width>100</width>
               <height>30</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>50</width>
+              <width>100</width>
               <height>30</height>
              </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="resetRange">
+            <property name="minimumSize">
+             <size>
+              <width>50</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>50</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Reset</string>
             </property>
            </widget>
           </item>
@@ -221,13 +240,13 @@
             </property>
             <property name="minimumSize">
              <size>
-              <width>500</width>
+              <width>400</width>
               <height>0</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>500</width>
+              <width>400</width>
               <height>16777215</height>
              </size>
             </property>

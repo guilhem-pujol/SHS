@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Mon May 19 17:37:27 2014
+# Created: Mon May 19 18:01:44 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -86,8 +86,8 @@ class Ui_MainWindow(object):
         self.textFrom.setObjectName(_fromUtf8("textFrom"))
         self.horizontalLayout_2.addWidget(self.textFrom)
         self.editBegin = QtGui.QLineEdit(self.bar1)
-        self.editBegin.setMinimumSize(QtCore.QSize(50, 30))
-        self.editBegin.setMaximumSize(QtCore.QSize(50, 30))
+        self.editBegin.setMinimumSize(QtCore.QSize(100, 30))
+        self.editBegin.setMaximumSize(QtCore.QSize(100, 30))
         self.editBegin.setText(_fromUtf8(""))
         self.editBegin.setObjectName(_fromUtf8("editBegin"))
         self.horizontalLayout_2.addWidget(self.editBegin)
@@ -97,24 +97,29 @@ class Ui_MainWindow(object):
         self.textTo.setObjectName(_fromUtf8("textTo"))
         self.horizontalLayout_2.addWidget(self.textTo)
         self.editEnd = QtGui.QLineEdit(self.bar1)
-        self.editEnd.setMinimumSize(QtCore.QSize(50, 30))
-        self.editEnd.setMaximumSize(QtCore.QSize(50, 30))
+        self.editEnd.setMinimumSize(QtCore.QSize(100, 30))
+        self.editEnd.setMaximumSize(QtCore.QSize(100, 30))
         self.editEnd.setObjectName(_fromUtf8("editEnd"))
         self.horizontalLayout_2.addWidget(self.editEnd)
+        self.resetRange = QtGui.QPushButton(self.bar1)
+        self.resetRange.setMinimumSize(QtCore.QSize(50, 0))
+        self.resetRange.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.resetRange.setObjectName(_fromUtf8("resetRange"))
+        self.horizontalLayout_2.addWidget(self.resetRange)
         self.searchResult = QtGui.QLabel(self.bar1)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(1)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.searchResult.sizePolicy().hasHeightForWidth())
         self.searchResult.setSizePolicy(sizePolicy)
-        self.searchResult.setMinimumSize(QtCore.QSize(500, 0))
-        self.searchResult.setMaximumSize(QtCore.QSize(500, 16777215))
+        self.searchResult.setMinimumSize(QtCore.QSize(400, 0))
+        self.searchResult.setMaximumSize(QtCore.QSize(400, 16777215))
         self.searchResult.setText(_fromUtf8(""))
         self.searchResult.setObjectName(_fromUtf8("searchResult"))
         self.horizontalLayout_2.addWidget(self.searchResult)
         spacerItem = QtGui.QSpacerItem(40, 20, QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.horizontalLayout_2.setStretch(7, 1)
+        self.horizontalLayout_2.setStretch(8, 1)
         self.verticalLayout_5.addWidget(self.bar1)
         self.bar2 = QtGui.QWidget(self.rightSide)
         sizePolicy = QtGui.QSizePolicy(QtGui.QSizePolicy.Preferred, QtGui.QSizePolicy.Preferred)
@@ -205,6 +210,7 @@ class Ui_MainWindow(object):
         self.textSearch.setText(_translate("MainWindow", "Motif :", None))
         self.textFrom.setText(_translate("MainWindow", "Du vers", None))
         self.textTo.setText(_translate("MainWindow", "jusqu\'au vers", None))
+        self.resetRange.setText(_translate("MainWindow", "Reset", None))
         self.graph1.setText(_translate("MainWindow", "Graphe 1", None))
         self.saveGraph1.setText(_translate("MainWindow", "Sauvegarder", None))
         self.graph2.setText(_translate("MainWindow", "Graphe 2", None))

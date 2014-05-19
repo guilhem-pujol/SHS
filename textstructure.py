@@ -24,15 +24,15 @@ class Text():
 
     self.begin = 0
     self.end = 0
+    self.beginText = ''
+    self.endText = ''
 
   def addVerse(self, verse):
     if verse.__class__ == Verse:
       self.verses.append(verse)
     else:
       raise StructureError('Text.addVerse: argument must be a Verse')
-
-    self.begin = 0
-    self.end = len(self.verses) - 1
+    self.resetRange()
 
   def __str__(self):
     return '\n'.join([str(v) for v in self.verses])
@@ -66,6 +66,31 @@ class Text():
       res.append((pos, self.matchByPos[pos]))
     return res
 
+  def setRange(self, begin, end):
+    vb = -1
+    ve = -1
+    for (i, v) in enumerate(self.verses):
+      if v.name == begin:
+        vb = i
+      if v.name == end:
+        ve = i
+      if vb != -1 and ve != -1:
+        break
+    else:
+      return False
+    if vb > ve:
+      return False
+    self.begin = vb
+    self.end = ve
+    self.beginText = begin
+    self.endText = end
+    return True
+
+  def resetRange(self):
+    self.begin = 0
+    self.end = len(self.verses) - 1
+    self.beginText = self.verses[self.begin].name
+    self.endText = self.verses[self.end].name
 
 class Verse():
   def __init__(self, name, feet):

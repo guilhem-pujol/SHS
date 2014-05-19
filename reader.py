@@ -18,6 +18,7 @@ def sanitize(content):
   content = content.lower()
   content = content.replace(u'ς', u'σ')
   content = content.replace('\r\n', '\n')
+  content = content.replace(u'\ufeff', '')
   return content
 
 def getFile(filename):

@@ -114,11 +114,19 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.editSearch.textEdited.connect(self.startSearch)
     self.editBegin.textEdited.connect(self.updateText)
     self.editEnd.textEdited.connect(self.updateText)
+    self.resetRange.clicked.connect(self.resetTextRange)
     self.exitAction.triggered.connect(QtGui.qApp.quit)
     self.openAction.triggered.connect(self.openNewFile)
     self.saveGraph1.clicked.connect(self.save1)
     self.saveGraph2.clicked.connect(self.save2)
     self.graph1.wheelEvent = self.graphZoomHandler
+
+  def resetTextRange(self):
+    currentItem = self.textsList.currentItem()
+    if currentItem == None: return
+    currentText = currentItem.text
+    currentText.resetRange()
+    self.updateDisplay()
 
   def graphZoomHandler(self, wheelEvent):
     if wheelEvent.delta() > 0:
@@ -185,24 +193,17 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.textDisplay.setCurrentWidget(currentItem.display)
     currentText = currentItem.text
 
-    self.editBegin.setText(str(currentText.begin + 1))
-    self.editEnd.setText(str(currentText.end + 1))
+    self.editBegin.setText(currentText.beginText)
+    self.editEnd.setText(currentText.endText)
     self.setWindowTitle(currentText.name)
 
   def updateText(self):
     currentText = self.textsList.currentItem().text
     if self.editBegin.text() == '' or self.editEnd.text() == '':
       return
-    begin, bok = self.editBegin.text().toInt()
-    end, eok = self.editEnd.text().toInt()
-    if not bok or not eok: return
-    begin -= 1
-    end -= 1
-    if end >= len(currentText.verses): return
-    if begin > end: return
-
-    currentText.begin = begin
-    currentText.end = end
+    begin, end = self.editBegin.text(), self.editEnd.text()
+    if not currentText.setRange(begin, end):
+      return
 
     self.updateDisplay()
     self.startSearch()
