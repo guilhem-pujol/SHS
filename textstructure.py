@@ -47,6 +47,25 @@ class Text():
 
     return self.numMatch
 
+  def result1(self):
+    res = []
+    for i in range(self.begin, self.end + 1):
+      v = self.verses[i]
+      res.append((v.name, v.numMatch))
+    return res
+
+  def result2(self):
+    allPos = ['1', '10', '11', '12',
+              '2', '20', '21', '22',
+              '3', '30', '31', '32',
+              '4', '40', '41', '42',
+              '5', '50', '51', '52',
+              '6', '60']
+    res = []
+    for pos in allPos:
+      res.append((pos, self.matchByPos[pos]))
+    return res
+
 
 class Verse():
   def __init__(self, name, feet):

@@ -215,8 +215,8 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.searchResult.setText(str(numMatchFile)+u' occurence(s) trouvée(s)')
     self.textDisplay.currentWidget().update()
 
-    result1 = [('verseId', 100), ('otherverseId', 42)]
-    result2 = [('posId', 1)]
+    result1 = currentText.result1()
+    result2 = currentText.result2()
 
     self.graphDrawer1.result = result1
     self.graphDrawer1.begin = 0
