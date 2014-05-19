@@ -254,13 +254,13 @@ class Syllable():
       for endPos in range(startPos, len(self.letters)):
         s = self.letters[startPos:endPos+1]
         res[0][s] += 1
-        k = ''
-        for c in s:
-          if not isVowel(c):
-            k += 'C'
-          else:
-            k += 'V'
-        res[1][k] += 1
+    k = ''
+    for c in self.letters:
+      if not isVowel(c):
+        k += 'C'
+      else:
+        k += 'V'
+    res[1][k] += 1
     return res
 
 def isSpecial(letter):
