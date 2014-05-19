@@ -46,7 +46,7 @@ class GraphDrawer:
     self.xLegendHeight = max(10, 8*self.xLegendMaxLength)
     self.yLegendWidth = 30
 
-    self.xMinOffset = 20
+    self.xMinOffset = 18
     self.yMinOffset = 10
 
     self.pxXAxis = self.marginLeft + self.yLegendWidth
