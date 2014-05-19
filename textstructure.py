@@ -3,6 +3,7 @@
 
 from debug import toASCII
 from collections import defaultdict
+from heapq import nlargest
 
 class StructureError(Exception):
   def __init__(self, value):
@@ -27,6 +28,8 @@ class Text():
     self.beginText = ''
     self.endText = ''
 
+    self.pattern = ''
+
   def addVerse(self, verse):
     if verse.__class__ == Verse:
       self.verses.append(verse)
@@ -42,6 +45,9 @@ class Text():
     else: return '\n'.join([v.text(True) for v in self.verses])
 
   def search(self, pattern):
+    if pattern == self.pattern:
+      return self.numMatch
+    self.pattern = pattern
     self.numMatch = 0
     self.matchByPos = defaultdict(int)
 
@@ -50,8 +56,25 @@ class Text():
       self.numMatch += v.search(pattern)
       for pos, n in v.matchByPos.iteritems():
         self.matchByPos[pos] += n
-
+    
     return self.numMatch
+
+  def stats(self):
+    res = [[], []]
+    for idx in range(23):
+      acc = (defaultdict(int), defaultdict(int))
+      for i in range(self.begin, self.end + 1):
+        v = self.verses[i]
+        tmp = v.stats(idx)
+        for k in range(2):
+          for (p, r) in tmp[k].iteritems():
+            acc[k][p] += r
+      for k in range(2):
+        l = acc[k].items()
+        l = nlargest(10, l, key = lambda x: x[1])
+        res[k].append([p for (p, _) in l])
+    return res
+
 
   def result1(self):
     res = []
@@ -126,6 +149,22 @@ class Verse():
 
     return self.numMatch
 
+  def stats(self, idx):
+    res = [defaultdict(int), defaultdict(int)]
+    acc = []
+    if idx == 0:
+      for idx in range(22):
+        f = self.feet[idx/4]
+        acc.append(f.stats(idx%4))
+    else:
+      f = self.feet[(idx-1)/4]
+      acc.append(f.stats((idx-1)%4))
+    for tmp in acc:
+      for k in range(2):
+        for (p, r) in tmp[k].iteritems():
+          res[k][p] += r
+    return res
+
 class Foot():
   dactyl = 0
   spondee = 1
@@ -162,6 +201,14 @@ class Foot():
     self.matchByPos = [s.search(pattern) for s in self.syllables]
     self.numMatch = sum(self.matchByPos)
     return self.numMatch
+
+  def stats(self, idx):
+    if self.metric == Foot.dactyl and idx == 1:
+      return (defaultdict(int), defaultdict(int))
+    if self.metric == Foot.spondee and idx >= 2:
+      return (defaultdict(int), defaultdict(int))
+    idx = (idx+1)/2
+    return self.syllables[idx].stats()
 
 class Syllable():
   long_syl = 0
@@ -200,6 +247,21 @@ class Syllable():
         self.numMatch += 1
 
     return self.numMatch
+
+  def stats(self):
+    res = (defaultdict(int), defaultdict(int))
+    for startPos in range(len(self.letters)):
+      for endPos in range(startPos, len(self.letters)):
+        s = self.letters[startPos:endPos+1]
+        res[0][s] += 1
+        k = ''
+        for c in s:
+          if not isVowel(c):
+            k += 'C'
+          else:
+            k += 'V'
+        res[1][k] += 1
+    return res
 
 def isSpecial(letter):
   return ord(letter) in [32, 44, 46, 180, 59, 183]

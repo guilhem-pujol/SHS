@@ -58,7 +58,7 @@
          </property>
          <property name="maximumSize">
           <size>
-           <width>16777215</width>
+           <width>200</width>
            <height>16777215</height>
           </size>
          </property>
@@ -68,6 +68,280 @@
          <property name="selectionMode">
           <enum>QAbstractItemView::SingleSelection</enum>
          </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QWidget" name="statsPanel" native="true">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QPushButton" name="statsButton">
+            <property name="text">
+             <string>Statistiques</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statsText">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="statsRange">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="textMostFrequent">
+            <property name="text">
+             <string>Motifs les plus fréquents</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="statsPos">
+            <item>
+             <property name="text">
+              <string>Toutes les positions</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>10</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>11</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>12</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>20</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>21</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>22</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>30</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>31</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>32</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>40</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>41</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>42</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>5</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>50</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>51</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>52</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>6</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>60</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="statsResults">
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>302</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>302</height>
+             </size>
+            </property>
+            <property name="editTriggers">
+             <set>QAbstractItemView::NoEditTriggers</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::NoSelection</enum>
+            </property>
+            <attribute name="horizontalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>99</number>
+            </attribute>
+            <attribute name="verticalHeaderVisible">
+             <bool>false</bool>
+            </attribute>
+            <row>
+             <property name="text">
+              <string>New Row</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>1</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>2</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>3</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>4</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>5</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>6</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>7</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>8</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>10</string>
+             </property>
+            </row>
+            <column>
+             <property name="text">
+              <string>Letters</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Masks</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -398,9 +672,7 @@
        </item>
        <item>
         <widget class="QStackedWidget" name="textDisplay">
-         <widget class="QWidget" name="page">
-          <zorder>bar1</zorder>
-         </widget>
+         <widget class="QWidget" name="page"/>
          <widget class="QWidget" name="page_2"/>
         </widget>
        </item>

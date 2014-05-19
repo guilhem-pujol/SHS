@@ -104,6 +104,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
 
     #FIXME: not sure this attribute is useful
     self.texts = {}
+    self.setupStats()
 
     self.graphDrawer1 = GraphDrawer(self.graph1)
     self.graphDrawer2 = GraphDrawer(self.graph2)
@@ -120,6 +121,35 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.saveGraph1.clicked.connect(self.save1)
     self.saveGraph2.clicked.connect(self.save2)
     self.graph1.wheelEvent = self.graphZoomHandler
+    self.statsButton.clicked.connect(self.updateStats)
+    self.statsPos.currentIndexChanged.connect(self.updateStatsDisplay)
+
+  def setupStats(self):
+    self.stats = None
+    for i in range(10):
+      for j in range(2):
+        item = QtGui.QTableWidgetItem()
+        self.statsResults.setItem(i, j, item)
+
+  def updateStats(self):
+    currentItem = self.textsList.currentItem()
+    if currentItem == None: return
+    currentText = currentItem.text
+    self.stats = currentText.stats()
+    self.statsText = currentText.name
+    self.statsRange = 'blih'
+    self.updateStatsDisplay()
+
+  def updateStatsDisplay(self):
+    if not self.stats:
+      return
+    idx = self.statsPos.currentIndex()
+    for i in range(10):
+      for j in range(2):
+        if i >= len(self.stats[j][idx]):
+          self.statsResults.item(i, j).setText('')
+        else:
+          self.statsResults.item(i, j).setText(self.stats[j][idx][i])
 
   def resetTextRange(self):
     currentItem = self.textsList.currentItem()
