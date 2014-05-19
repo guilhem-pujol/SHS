@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Mon May 19 19:18:04 2014
+# Created: Mon May 19 22:42:29 2014
 #      by: PyQt4 UI code generator 4.10.4
 #
 # WARNING! All changes made in this file will be lost!
@@ -100,6 +100,25 @@ class Ui_MainWindow(object):
         self.statsPos.addItem(_fromUtf8(""))
         self.statsPos.addItem(_fromUtf8(""))
         self.verticalLayout_6.addWidget(self.statsPos)
+        self.widget = QtGui.QWidget(self.statsPanel)
+        self.widget.setObjectName(_fromUtf8("widget"))
+        self.horizontalLayout_4 = QtGui.QHBoxLayout(self.widget)
+        self.horizontalLayout_4.setMargin(0)
+        self.horizontalLayout_4.setObjectName(_fromUtf8("horizontalLayout_4"))
+        self.statsNb = QtGui.QComboBox(self.widget)
+        self.statsNb.setMaximumSize(QtCore.QSize(50, 16777215))
+        self.statsNb.setSizeAdjustPolicy(QtGui.QComboBox.AdjustToContentsOnFirstShow)
+        self.statsNb.setObjectName(_fromUtf8("statsNb"))
+        self.statsNb.addItem(_fromUtf8(""))
+        self.statsNb.addItem(_fromUtf8(""))
+        self.statsNb.addItem(_fromUtf8(""))
+        self.statsNb.addItem(_fromUtf8(""))
+        self.statsNb.addItem(_fromUtf8(""))
+        self.horizontalLayout_4.addWidget(self.statsNb)
+        self.textNb = QtGui.QLabel(self.widget)
+        self.textNb.setObjectName(_fromUtf8("textNb"))
+        self.horizontalLayout_4.addWidget(self.textNb)
+        self.verticalLayout_6.addWidget(self.widget)
         self.statsResults = QtGui.QTableWidget(self.statsPanel)
         self.statsResults.setMinimumSize(QtCore.QSize(200, 302))
         self.statsResults.setMaximumSize(QtCore.QSize(200, 302))
@@ -319,6 +338,12 @@ class Ui_MainWindow(object):
         self.statsPos.setItemText(20, _translate("MainWindow", "52", None))
         self.statsPos.setItemText(21, _translate("MainWindow", "6", None))
         self.statsPos.setItemText(22, _translate("MainWindow", "60", None))
+        self.statsNb.setItemText(0, _translate("MainWindow", "1", None))
+        self.statsNb.setItemText(1, _translate("MainWindow", "2", None))
+        self.statsNb.setItemText(2, _translate("MainWindow", "3", None))
+        self.statsNb.setItemText(3, _translate("MainWindow", "4", None))
+        self.statsNb.setItemText(4, _translate("MainWindow", "5", None))
+        self.textNb.setText(_translate("MainWindow", "lettre(s)", None))
         item = self.statsResults.verticalHeaderItem(0)
         item.setText(_translate("MainWindow", "New Row", None))
         item = self.statsResults.verticalHeaderItem(1)

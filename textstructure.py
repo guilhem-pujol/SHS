@@ -60,20 +60,23 @@ class Text():
     return self.numMatch
 
   def stats(self):
-    res = [[], []]
-    for idx in range(23):
-      acc = (defaultdict(int), defaultdict(int))
-      for i in range(self.begin, self.end + 1):
-        v = self.verses[i]
-        tmp = v.stats(idx)
+    result = []
+    for nb in range(1, 6):
+      res = [[], []]
+      for idx in range(23):
+        acc = (defaultdict(int), defaultdict(int))
+        for i in range(self.begin, self.end + 1):
+          v = self.verses[i]
+          tmp = v.stats(idx, nb)
+          for k in range(2):
+            for (p, r) in tmp[k].iteritems():
+              acc[k][p] += r
         for k in range(2):
-          for (p, r) in tmp[k].iteritems():
-            acc[k][p] += r
-      for k in range(2):
-        l = acc[k].items()
-        l = nlargest(10, l, key = lambda x: x[1])
-        res[k].append([p for (p, _) in l])
-    return res
+          l = acc[k].items()
+          l = nlargest(10, l, key = lambda x: x[1])
+          res[k].append([p for (p, _) in l])
+      result.append(res)
+    return result
 
 
   def result1(self):
@@ -149,16 +152,16 @@ class Verse():
 
     return self.numMatch
 
-  def stats(self, idx):
+  def stats(self, idx, nb):
     res = [defaultdict(int), defaultdict(int)]
     acc = []
     if idx == 0:
       for idx in range(22):
         f = self.feet[idx/4]
-        acc.append(f.stats(idx%4))
+        acc.append(f.stats(idx%4, nb))
     else:
       f = self.feet[(idx-1)/4]
-      acc.append(f.stats((idx-1)%4))
+      acc.append(f.stats((idx-1)%4, nb))
     for tmp in acc:
       for k in range(2):
         for (p, r) in tmp[k].iteritems():
@@ -202,13 +205,13 @@ class Foot():
     self.numMatch = sum(self.matchByPos)
     return self.numMatch
 
-  def stats(self, idx):
+  def stats(self, idx, nb):
     if self.metric == Foot.dactyl and idx == 1:
       return (defaultdict(int), defaultdict(int))
     if self.metric == Foot.spondee and idx >= 2:
       return (defaultdict(int), defaultdict(int))
     idx = (idx+1)/2
-    return self.syllables[idx].stats()
+    return self.syllables[idx].stats(nb)
 
 class Syllable():
   long_syl = 0
@@ -248,12 +251,13 @@ class Syllable():
 
     return self.numMatch
 
-  def stats(self):
+  def stats(self, nb):
     res = (defaultdict(int), defaultdict(int))
-    for startPos in range(len(self.letters)):
-      for endPos in range(startPos, len(self.letters)):
-        s = self.letters[startPos:endPos+1]
-        res[0][s] += 1
+    if len(self.letters) != nb:
+      return res
+    for startPos in range(len(self.letters) - nb + 1):
+      s = self.letters[startPos:startPos+nb]
+      res[0][s] += 1
     k = ''
     for c in self.letters:
       if not isVowel(c):

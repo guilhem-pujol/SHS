@@ -123,6 +123,7 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.graph1.wheelEvent = self.graphZoomHandler
     self.statsButton.clicked.connect(self.updateStats)
     self.statsPos.currentIndexChanged.connect(self.updateStatsDisplay)
+    self.statsNb.currentIndexChanged.connect(self.updateStatsDisplay)
 
   def setupStats(self):
     self.stats = None
@@ -146,12 +147,17 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     if not self.stats:
       return
     idx = self.statsPos.currentIndex()
+    if idx == -1:
+      return
+    nb = self.statsNb.currentIndex()
+    if nb == -1:
+      return
     for i in range(10):
       for j in range(2):
-        if i >= len(self.stats[j][idx]):
+        if i >= len(self.stats[nb][j][idx]):
           self.statsResults.item(i, j).setText('')
         else:
-          self.statsResults.item(i, j).setText(self.stats[j][idx][i])
+          self.statsResults.item(i, j).setText(self.stats[nb][j][idx][i])
 
   def resetTextRange(self):
     currentItem = self.textsList.currentItem()
