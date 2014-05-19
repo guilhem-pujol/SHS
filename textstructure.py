@@ -11,6 +11,12 @@ class StructureError(Exception):
     return repr(self.value)
 
 class Text():
+  allPos = ['1', '10', '11', '12',
+            '2', '20', '21', '22',
+            '3', '30', '31', '32',
+            '4', '40', '41', '42',
+            '5', '50', '51', '52',
+            '6', '60']
   def __init__(self, name):
     self.name = name
     self.verses = []
@@ -55,14 +61,8 @@ class Text():
     return res
 
   def result2(self):
-    allPos = ['1', '10', '11', '12',
-              '2', '20', '21', '22',
-              '3', '30', '31', '32',
-              '4', '40', '41', '42',
-              '5', '50', '51', '52',
-              '6', '60']
     res = []
-    for pos in allPos:
+    for pos in Text.allPos:
       res.append((pos, self.matchByPos[pos]))
     return res
 

@@ -30,7 +30,15 @@ class TextDisplay(QtGui.QTableWidget):
     self.setRowCount(len(self.text.verses))
     self.setColumnCount(18)
     self.horizontalHeader().setVisible(True)
-    self.horizontalHeader().setDefaultSectionSize(55)
+    self.horizontalHeader().setDefaultSectionSize(54)
+    self.horizontalHeader().setResizeMode(QtGui.QHeaderView.Fixed)
+    self.horizontalHeader().resizeSection(0, 86)
+    self.setHorizontalHeaderLabels(['', '1', '11', '12',
+                                        '2', '21', '22',
+                                        '3', '31', '32',
+                                        '4', '41', '42',
+                                        '5', '51', '52',
+                                        '6', '60'])
     self.verticalHeader().setVisible(False)
 
     self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
