@@ -10,7 +10,6 @@ def drawRotatedText(painter, x, y, text):
   painter.drawText(0, 0, text);
   painter.restore()
 
-
 class GraphDrawer:
   plotGlobal = 0
   plotPositions = 1
@@ -22,6 +21,7 @@ class GraphDrawer:
     self.result = [('0', 0)]
     self.image = None
     self.painter = None
+    self.title = ""
 
   def getPointedVerse(self, x):
     if x <= self.pxX0: return self.begin
@@ -40,13 +40,13 @@ class GraphDrawer:
 
     self.marginLeft = 5
     self.marginRight = 25
-    self.marginBottom = 5
+    self.marginBottom = 10
     self.marginTop = 15
 
     self.xLegendHeight = max(10, 8*self.xLegendMaxLength)
     self.yLegendWidth = 30
 
-    self.xMinOffset = 10
+    self.xMinOffset = 20
     self.yMinOffset = 10
 
     self.pxXAxis = self.marginLeft + self.yLegendWidth
@@ -75,10 +75,11 @@ class GraphDrawer:
 
     self.painter.setPen(black)
     self.drawAxis()
+    self.drawTitle()
 
     self.painter.setPen(red)
     self.drawValues()
-
+    
     self.painter.end()
 
     self.widget.setPixmap(QtGui.QPixmap.fromImage(self.image))
@@ -96,7 +97,7 @@ class GraphDrawer:
       x = self.pxX0 + (verseIndex - self.begin) * self.pxPerVerse
       if x >= oldX + self.xMinOffset:
         self.painter.drawLine(x, self.pxY0 - 2, x, self.pxY0 + 2)
-        drawRotatedText(self.painter, x, self.pxY0 + 2, self.result[verseIndex][0])
+        drawRotatedText(self.painter, x, self.pxY0 + 4, self.result[verseIndex][0])
         oldX = x
 
     # y graduations
@@ -132,3 +133,6 @@ class GraphDrawer:
         self.painter.drawLine(x, self.pxY0, x, y)
 
       previousX = x
+      
+  def drawTitle(self):
+    self.painter.drawText(15, 12, self.title)

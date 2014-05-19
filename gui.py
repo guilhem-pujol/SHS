@@ -232,6 +232,9 @@ class mainWindow(QtGui.QMainWindow, ui_gui.Ui_MainWindow):
     self.graphDrawer2.result = result2
     self.graphDrawer2.begin = 0
     self.graphDrawer2.end = len(result2) - 1
+    
+    self.graphDrawer1.title = 'Vers - "'+self.editSearch.text()+'" dans '+currentText.name+u' (de à )'
+    self.graphDrawer2.title = 'Positions - "'+self.editSearch.text()+'" dans '+currentText.name+u' (de à )'
 
     self.graphDrawer1.buildGraph()
     self.graphDrawer2.buildGraph()
