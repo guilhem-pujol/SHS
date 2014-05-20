@@ -243,7 +243,7 @@ class Syllable():
           isMatch = not isVowel(self.letters[startPos + i])
         elif pattern[i] == 'V':
           isMatch = isVowel(self.letters[startPos + i])
-        else:
+        elif pattern[i] != ".":
           isMatch = (self.letters[startPos + i] == pattern[i])
 
         if not isMatch: break
