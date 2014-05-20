@@ -29,6 +29,7 @@ class Text():
     self.endText = ''
 
     self.pattern = ''
+    self.updated = False
 
   def addVerse(self, verse):
     if verse.__class__ == Verse:
@@ -45,7 +46,7 @@ class Text():
     else: return '\n'.join([v.text(True) for v in self.verses])
 
   def search(self, pattern):
-    if pattern == self.pattern:
+    if pattern == self.pattern and not self.updated:
       return self.numMatch
     self.pattern = pattern
     self.numMatch = 0
@@ -110,6 +111,7 @@ class Text():
     self.end = ve
     self.beginText = begin
     self.endText = end
+    self.updated = True
     return True
 
   def resetRange(self):
