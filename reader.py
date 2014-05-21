@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import unicodedata
-import ntpath
+import os
 from debug import toASCII
 from textstructure import *
 
@@ -26,7 +26,7 @@ def getFile(filename):
   content = f.read().decode('utf-8')
   content = sanitize(content)
 
-  result = Text(ntpath.basename(str(filename)))
+  result = Text(os.path.basename(str(filename)))
   for line in content.split('\n'):
     verse = buildVerseFromLine(line)
     if verse != None:
