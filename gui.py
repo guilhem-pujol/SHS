@@ -74,7 +74,8 @@ class TextDisplay(QtGui.QTableWidget):
   def updateLines(self, start, end):
     for i in range(start, end+1):
       v = self.text.verses[i]
-      if v.numMatch > 0:
+      active = (self.text.begin <= i <= self.text.end)
+      if v.numMatch > 0 and active:
         background = TextDisplay.yellow
       else:
         background = QtCore.Qt.white
@@ -87,7 +88,7 @@ class TextDisplay(QtGui.QTableWidget):
           l = 2
         for k in range(l):
           s = f.syllables[k]
-          if s.numMatch > 0:
+          if s.numMatch > 0 and active:
             foreground = TextDisplay.red
           else:
             foreground = QtCore.Qt.black
