@@ -7,3 +7,6 @@ SHS/*
 
 #python compiled files
 *.pyc
+
+/build/
+/dist/
