@@ -5,15 +5,29 @@ Usage:
     python setup.py py2app
 """
 
+import sys
 from setuptools import setup
 
 APP = ['main.py']
 DATA_FILES = []
 OPTIONS = {'argv_emulation': True, 'excludes': ['matplotlib','scipy','pyopengl','numpy', 'email', 'virtualenv']}
 
-setup(
+if sys.platform == 'darwin':
+  extra = dict(
     app=APP,
     data_files=DATA_FILES,
     options={'py2app': OPTIONS},
     setup_requires=['py2app'],
-)
+  )
+elif sys.platform == 'win32':
+  extra = dict(
+    app=APP,
+    includes=['sip', 'PyQt4._qt'],
+    setup_requires=['py2exe'],
+  )
+else:
+  extra = dict(
+      scripts=APP, #FIXME
+  )
+
+setup(name='Motifs', **extra)
